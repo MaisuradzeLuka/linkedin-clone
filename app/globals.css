@@ -1,26 +1,20 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer components {
+  .icon {
+    @apply flex flex-col items-center justify-center text-sm font-light;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  .icon svg {
+    @apply fill-white stroke-gray-500;
+  }
+
+  .icon p {
+    @apply text-gray-600 text-xs;
+  }
+
+  .postButton {
+    @apply flex justify-center flex-1;
+  }
 }
