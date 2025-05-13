@@ -37,7 +37,7 @@ const UserInfo = async () => {
       <SignedOut>
         <div className="flex flex-col items-center gap-4">
           <Image
-            src="/default-avatar.jpg"
+            src="/assets/default-avatar.jpg"
             width={40}
             height={40}
             alt="user avatar"
