@@ -66,7 +66,7 @@ const PostFeed = async () => {
 
             <div className="w-full h-[1px] bg-gray-300 mt-2" />
 
-            <PostFeatures />
+            <PostFeatures postId={post._id} />
           </article>
         ))}
       </section>

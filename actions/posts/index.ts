@@ -51,3 +51,33 @@ export const createPost = async (postValue: string, image?: string) => {
     throw new Error(`Error while creating post: ${error.message}`);
   }
 };
+
+export const likeUnlikePost = async (postId: string, additionalUrl: string) => {
+  const user = await currentUser();
+
+  if (!user) return "User not found";
+
+  const body = {
+    user: user.id,
+    postId,
+  };
+
+  try {
+    const res = await fetch(
+      `http://localhost:3000/api/posts/${postId}/${additionalUrl}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to like/unlike post`);
+    }
+
+    return res.json();
+  } catch (error: any) {
+    throw new Error(`Error while liking/unliking post: ${error.message}`);
+  }
+};
