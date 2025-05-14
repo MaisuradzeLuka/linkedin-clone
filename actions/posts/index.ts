@@ -4,9 +4,15 @@ import { PostType } from "@/types";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
+const isProduction = true;
+
+const API_URL = isProduction
+  ? process.env.NEXT_PUBLIC_API_URL
+  : "http://localhost:3000/api/posts";
+
 export const getPosts = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/posts");
+    const res = await fetch(`${API_URL}`);
 
     if (!res.ok) {
       throw new Error(`Failed to fetch posts`);
@@ -35,7 +41,7 @@ export const createPost = async (postValue: string, image?: string) => {
   };
 
   try {
-    const res = await fetch("http://localhost:3000/api/posts", {
+    const res = await fetch(`${API_URL}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(postBody),
@@ -63,14 +69,11 @@ export const likeUnlikePost = async (postId: string, additionalUrl: string) => {
   };
 
   try {
-    const res = await fetch(
-      `http://localhost:3000/api/posts/${postId}/${additionalUrl}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      }
-    );
+    const res = await fetch(`${API_URL}/${postId}/${additionalUrl}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
     if (!res.ok) {
       throw new Error(`Failed to like/unlike post`);

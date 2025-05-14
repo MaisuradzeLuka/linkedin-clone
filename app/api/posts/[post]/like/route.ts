@@ -2,7 +2,7 @@ import connectToDb from "@/mongodb";
 import { PostSchema } from "@/mongodb/schemas/Post";
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function PATCH(request: Request) {
   const { user, postId } = await request.json();
 
   if (!user) {
