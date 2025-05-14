@@ -4,7 +4,7 @@ import { PostType } from "@/types";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
-const isProduction = false;
+const isProduction = true;
 
 const API_URL = isProduction
   ? process.env.NEXT_PUBLIC_API_URL
