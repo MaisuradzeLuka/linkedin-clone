@@ -15,7 +15,7 @@ const PostFeed = async () => {
       <div className="w-full h-[1px] bg-gray-300 mt-2" />
 
       <section className="flex flex-col gap-4 py-2 ">
-        {posts.map((post) => (
+        {posts?.map((post) => (
           <article
             key={post._id}
             className="p-4 border-b bg-white rounded-md border-gray-200"
