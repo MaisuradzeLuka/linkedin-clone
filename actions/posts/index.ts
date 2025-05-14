@@ -4,13 +4,14 @@ import { PostType } from "@/types";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
-const isProduction = true;
+const isProduction = false;
 
 const API_URL = isProduction
   ? process.env.NEXT_PUBLIC_API_URL
-  : "http://localhost:3000/api/posts";
+  : "http://localhost:3000/api/posts/";
 
 export const getPosts = async () => {
+  console.log(process.env.NEXT_PUBLIC_API_URL);
   try {
     const res = await fetch(`${API_URL}`);
 
@@ -69,7 +70,7 @@ export const likeUnlikePost = async (postId: string, additionalUrl: string) => {
   };
 
   try {
-    const res = await fetch(`${API_URL}/${postId}/${additionalUrl}`, {
+    const res = await fetch(`${API_URL}${postId}/${additionalUrl}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
