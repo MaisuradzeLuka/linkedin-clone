@@ -56,9 +56,9 @@ const PostFeatures = ({ postId }: { postId: string }) => {
     validateUser();
 
     setIsLoading(true);
-    const url = user.user && likes.includes(user.user.id) ? "unlike" : "like";
+    const type = user.user && likes.includes(user.user.id) ? "unlike" : "like";
 
-    const res = await likeUnlikePost(postId, url);
+    const res = await likeUnlikePost(postId, type);
 
     setLikes(res);
     setIsLoading(false);

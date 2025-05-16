@@ -142,6 +142,7 @@ const CreatePost = () => {
             variant="secondary"
             className="absolute left-0 bg-black text-white cursor-pointer"
             type="submit"
+            disabled={isLoading}
           >
             {isLoading ? "Loading..." : "Submit"}
           </Button>
