@@ -1,16 +1,27 @@
 import Image from "next/image";
 import CreatePost from "./CreatePost";
-import { getPosts } from "@/actions/posts";
-import { FetchedPostType } from "@/types";
+import { FetchedPostType, SafeUser } from "@/types";
 import { getTimeAgo } from "@/lib/utils";
 import PostFeatures from "./PostFeatures";
+import { User } from "@clerk/nextjs/server";
 
-const PostFeed = async () => {
-  const posts: FetchedPostType[] = await getPosts();
+const PostFeed = async ({
+  posts,
+  user,
+}: {
+  posts: FetchedPostType[];
+  user: User | null;
+}) => {
+  const clientUser = {
+    firstname: user?.firstName ?? "",
+    lastname: user?.lastName ?? "",
+    avatar: user?.imageUrl,
+    userId: user?.id,
+  };
 
   return (
     <div className="flex flex-col gap-2">
-      <CreatePost />
+      <CreatePost user={clientUser as SafeUser} />
 
       <div className="w-full h-[1px] bg-gray-300 mt-2" />
 
@@ -66,7 +77,7 @@ const PostFeed = async () => {
 
             <div className="w-full h-[1px] bg-gray-300 mt-2" />
 
-            <PostFeatures postId={post._id} />
+            <PostFeatures postId={post._id} userId={user?.id as string} />
           </article>
         ))}
       </section>

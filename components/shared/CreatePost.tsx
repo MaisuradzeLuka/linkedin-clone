@@ -1,15 +1,13 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button } from "../ui/button";
 import { createPost } from "@/actions/posts";
 import { toast } from "sonner";
+import { SafeUser } from "@/types";
 
-const CreatePost = () => {
-  const { user } = useUser();
-
+const CreatePost = ({ user }: { user: SafeUser }) => {
   const [postValue, setPostValue] = useState("");
   const [image, setImage] = useState("");
   const [postValueError, setPostValueError] = useState("");
@@ -46,16 +44,6 @@ const CreatePost = () => {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!user) {
-      toast.error("Unauthprised", {
-        description: "You must log in to post!",
-        className: "!text-red-500",
-        duration: 3000,
-      });
-
-      return;
-    }
-
     const postValueLength = postValue.trim().length;
 
     if (postValueLength < 2) {
@@ -69,7 +57,7 @@ const CreatePost = () => {
     if (imageError || postValueError) return;
 
     setIsLoading(true);
-    const newPost = await createPost(postValue, image);
+    const newPost = await createPost(postValue, user, image);
 
     if (newPost) {
       toast.success("Post created!", {
@@ -100,7 +88,7 @@ const CreatePost = () => {
     >
       <div className="flex items-center gap-4">
         <Image
-          src={user?.imageUrl || "/assets/default-avatar.jpg"}
+          src={user.avatar || "/assets/default-avatar.jpg"}
           width={40}
           height={40}
           alt="user avatar"
@@ -139,8 +127,8 @@ const CreatePost = () => {
       <div className="relative flex justify-end gap-2 mt-6">
         {(image || postValue) && (
           <Button
-            variant="secondary"
-            className="absolute left-0 bg-black text-white cursor-pointer"
+            variant="outline"
+            className="absolute left-0 bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer"
             type="submit"
             disabled={isLoading}
           >
@@ -148,7 +136,7 @@ const CreatePost = () => {
           </Button>
         )}
 
-        <label className="bg-black text-white py-2 px-4 rounded-md font-semibold text-sm  cursor-pointer">
+        <label className="bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition border !border-gray-500 py-2 px-4 rounded-md font-semibold text-sm  cursor-pointer">
           {image ? "Change image" : "Add image"}
           <input
             type="file"
@@ -162,8 +150,8 @@ const CreatePost = () => {
 
         {image && (
           <Button
-            variant="secondary"
-            className="bg-black text-white cursor-pointer"
+            variant="outline"
+            className="bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer"
             type="button"
             onClick={onImageDelete}
           >

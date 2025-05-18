@@ -16,3 +16,10 @@ export type FetchedPostType = PostType & {
   createdAt: string;
   updatedAt: string;
 };
+
+export type SafeUser = {
+  userId: string;
+  firstname: string | null;
+  lastname: string | null;
+  avatar: string;
+};
