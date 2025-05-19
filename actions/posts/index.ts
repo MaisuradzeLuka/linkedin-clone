@@ -2,7 +2,7 @@
 
 import connectToDb from "@/mongodb";
 import { PostSchema } from "@/mongodb/schemas/Post";
-import { FetchedPostType, PostType, SafeUser } from "@/types";
+import { CommentType, FetchedPostType, PostType, SafeUser } from "@/types";
 import { revalidatePath } from "next/cache";
 
 export const getPosts = async () => {
@@ -11,11 +11,20 @@ export const getPosts = async () => {
 
     const posts = await PostSchema.find()
       .sort({ createdAt: -1 })
+      .populate({
+        path: "comments",
+
+        options: { sort: { createdAt: -1 } },
+      })
       .lean<FetchedPostType[]>();
 
     return posts.map((post) => ({
       ...post,
       _id: post._id.toString(),
+      comments: post.comments?.map((comment: CommentType) => ({
+        ...comment,
+        _id: comment._id.toString(),
+      })),
     }));
   } catch (error: any) {
     throw new Error(`Failed while getting posts: ${error.message}`);

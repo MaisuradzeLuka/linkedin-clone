@@ -1,5 +1,5 @@
 import Image from "next/image";
-import CreatePost from "./CreatePost";
+import CreatePost from "../Forms/CreatePost";
 import { FetchedPostType, SafeUser } from "@/types";
 import { getTimeAgo } from "@/lib/utils";
 import PostFeatures from "./PostFeatures";
@@ -77,7 +77,11 @@ const PostFeed = async ({
 
             <div className="w-full h-[1px] bg-gray-300 mt-2" />
 
-            <PostFeatures postId={post._id} userId={user?.id as string} />
+            <PostFeatures
+              postId={post._id}
+              comments={post.comments}
+              user={clientUser as SafeUser}
+            />
           </article>
         ))}
       </section>

@@ -13,17 +13,20 @@ import { toast } from "sonner";
 import { useState } from "react";
 
 import { likeUnlikePost } from "@/actions/posts";
+import { CommentType, SafeUser } from "@/types";
+import CreateComment from "../Forms/CreateComment";
 
-const PostFeatures = ({
-  postId,
-  userId,
-}: {
+type PostFeaturesType = {
   postId: string;
-  userId: string;
-}) => {
+  user: SafeUser;
+  comments?: CommentType[];
+};
+
+const PostFeatures = ({ postId, user, comments }: PostFeaturesType) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [likes, setLikes] = useState<string[]>([]);
+  const [showForm, setShowForm] = useState(false);
 
   // const url = window.location.href;
 
@@ -48,16 +51,12 @@ const PostFeatures = ({
 
   const handleLike = async () => {
     setIsLoading(true);
-    const type = likes.includes(userId) ? "unlike" : "like";
+    const type = likes.includes(user.userId) ? "unlike" : "like";
 
-    const res = await likeUnlikePost(postId, type, userId);
+    const res = await likeUnlikePost(postId, type, user.userId);
 
     setLikes(res);
     setIsLoading(false);
-  };
-
-  const handleComment = () => {
-    // Handle comment functionality here
   };
 
   const handleRepost = () => {
@@ -65,33 +64,37 @@ const PostFeatures = ({
   };
 
   return (
-    <div className="w-full sm:w-4/5 mx-auto flex justify-between items-center mt-4">
-      <button
-        className="flex items-center gap-1 cursor-pointer text-sm md:text-md hover:bg-gray-200 px-2 py-1 rounded-md transition"
-        onClick={handleLike}
-      >
-        <ThumbsUp
-          className={`w-4 h-4 sm:w-6 sm:h-6  ${
-            likes.includes(userId) ? "text-blue-500" : ""
-          }`}
-        />{" "}
-        Like
-      </button>
+    <div className="w-full flex flex-col items mt-4">
+      <div className="w-full sm:w-4/5 self-center flex justify-between items-center">
+        <button
+          className="flex items-center gap-1 cursor-pointer text-sm md:text-md hover:bg-gray-200 px-2 py-1 rounded-md transition"
+          onClick={handleLike}
+        >
+          <ThumbsUp
+            className={`w-4 h-4 sm:w-6 sm:h-6  ${
+              likes.includes(user.userId) ? "text-blue-500" : ""
+            }`}
+          />{" "}
+          Like
+        </button>
 
-      <button className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md transition">
-        <MessageCircle className="w-4 h-4 sm:w-6 sm:h-6" /> Comment
-      </button>
+        <button
+          onClick={() => setShowForm((prev) => !prev)}
+          className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md transition"
+        >
+          <MessageCircle className="w-4 h-4 sm:w-6 sm:h-6" /> Comment
+        </button>
 
-      <button className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md transition">
-        <Repeat className="w-4 h-4 sm:w-6 sm:h-6" /> Repost
-      </button>
+        <button className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md transition">
+          <Repeat className="w-4 h-4 sm:w-6 sm:h-6" /> Repost
+        </button>
 
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md">
-          <Send className="w-4 h-4 sm:w-6 sm:h-6" /> Send
-        </DialogTrigger>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md">
+            <Send className="w-4 h-4 sm:w-6 sm:h-6" /> Send
+          </DialogTrigger>
 
-        {/* <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md shadow-lg">
+          {/* <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md shadow-lg">
           <DialogHeader>
             <DialogTitle className="sr-only">Post share link</DialogTitle>
           </DialogHeader>
@@ -107,9 +110,10 @@ const PostFeatures = ({
             Copy
           </Button>
         </DialogContent> */}
-      </Dialog>
+        </Dialog>
+      </div>
 
-      {/* {showForm && <form></form>} */}
+      {showForm && <CreateComment postId={postId} comments={comments} />}
     </div>
   );
 };

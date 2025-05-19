@@ -5,11 +5,8 @@ const comment = new mongoose.Schema(
     user: {
       firstname: { type: String, required: true },
       lastname: { type: String },
-      userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-      },
       avatar: { type: String, required: true },
+      userId: { type: String, required: true },
     },
     comment: { type: String, required: true },
   },
@@ -19,4 +16,4 @@ const comment = new mongoose.Schema(
 );
 
 export const CommentSchema =
-  mongoose.models.CommmentSchema || mongoose.model("CommentSchema", comment);
+  mongoose.models.CommentSchema || mongoose.model("CommentSchema", comment);

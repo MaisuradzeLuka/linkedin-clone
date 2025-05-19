@@ -11,10 +11,23 @@ export type PostType = {
   comments?: string[];
 };
 
+export type CommentType = {
+  _id: string;
+  user: {
+    firstname: string;
+    lastname: string;
+    avatar: string;
+    userId: string;
+  };
+  comment: string;
+  createdAt: string;
+};
+
 export type FetchedPostType = PostType & {
   _id: string;
   createdAt: string;
   updatedAt: string;
+  comments?: CommentType[];
 };
 
 export type SafeUser = {
