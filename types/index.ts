@@ -8,7 +8,6 @@ export type PostType = {
   };
   postImage?: String;
   likes?: string[];
-  comments?: string[];
 };
 
 export type CommentType = {

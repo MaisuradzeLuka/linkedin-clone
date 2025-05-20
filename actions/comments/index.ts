@@ -1,7 +1,7 @@
 "use server";
 
 import connectToDb from "@/mongodb";
-import { Comment } from "@/mongodb/schemas/Comment";
+import { CommentSchema } from "@/mongodb/schemas/Comment";
 import { PostSchema } from "@/mongodb/schemas/Post";
 
 import { revalidatePath } from "next/cache";
@@ -10,7 +10,7 @@ export const createComment = async (commentBody: any, postId: string) => {
   await connectToDb();
 
   try {
-    const newComment = await Comment.create(commentBody);
+    const newComment = await CommentSchema.create(commentBody);
 
     await PostSchema.findByIdAndUpdate(
       { _id: postId },
