@@ -2,7 +2,7 @@
 
 import connectToDb from "@/mongodb";
 import { Comment } from "@/mongodb/schemas/Comment";
-import { PostSchema } from "@/mongodb/schemas/Post";
+import { Post } from "@/mongodb/schemas/Post";
 
 import { revalidatePath } from "next/cache";
 
@@ -12,7 +12,7 @@ export const createComment = async (commentBody: any, postId: string) => {
   try {
     const newComment = await Comment.create(commentBody);
 
-    await PostSchema.findByIdAndUpdate(
+    await Post.findByIdAndUpdate(
       { _id: postId },
       {
         $push: { comments: newComment._id },

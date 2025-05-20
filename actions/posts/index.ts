@@ -1,7 +1,7 @@
 "use server";
 
 import connectToDb from "@/mongodb";
-import { PostSchema } from "@/mongodb/schemas/Post";
+import { Post } from "@/mongodb/schemas/Post";
 import { CommentType, FetchedPostType, PostType, SafeUser } from "@/types";
 import { revalidatePath } from "next/cache";
 
@@ -9,7 +9,7 @@ export const getPosts = async () => {
   try {
     await connectToDb();
 
-    const posts = await PostSchema.find()
+    const posts = await Post.find()
       .sort({ createdAt: -1 })
       .populate({
         path: "comments",
@@ -50,7 +50,7 @@ export const createPost = async (
   try {
     await connectToDb();
 
-    const newPost = await PostSchema.create(postBody);
+    const newPost = await Post.create(postBody);
 
     const plainPost = {
       ...newPost.toObject(),
@@ -74,7 +74,7 @@ export const likeUnlikePost = async (
     await connectToDb();
 
     if (type === "like") {
-      const updatedPost = await PostSchema.findOneAndUpdate(
+      const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
         { $addToSet: { likes: userId } },
         { new: true }
@@ -82,7 +82,7 @@ export const likeUnlikePost = async (
 
       return updatedPost.likes;
     } else if (type === "unlike") {
-      const updatedPost = await PostSchema.findOneAndUpdate(
+      const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
         { $pull: { likes: userId } },
         { new: true }

@@ -1,8 +1,7 @@
 import { createComment } from "@/actions/comments";
 import { getTimeAgo } from "@/lib/utils";
-import { CommentType, SafeUser } from "@/types";
+import { CommentType } from "@/types";
 import { useUser } from "@clerk/nextjs";
-import mongoose from "mongoose";
 import Image from "next/image";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
