@@ -10,7 +10,7 @@ import { MessageCircle, Repeat, Send, ThumbsUp } from "lucide-react";
 import { DialogHeader } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { likeUnlikePost } from "@/actions/posts";
 import { CommentType, SafeUser } from "@/types";
@@ -20,43 +20,49 @@ type PostFeaturesType = {
   postId: string;
   user: SafeUser;
   comments?: CommentType[];
+  defaultLikes: string[];
 };
 
-const PostFeatures = ({ postId, user, comments }: PostFeaturesType) => {
+const PostFeatures = ({
+  postId,
+  user,
+  comments,
+  defaultLikes,
+}: PostFeaturesType) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [likes, setLikes] = useState<string[]>([]);
+  const [likes, setLikes] = useState<string[]>(defaultLikes);
   const [showForm, setShowForm] = useState(false);
+  const [fullUrl, setFullUrl] = useState("");
 
-  // const url = window.location.href;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const currentUrl = window.location.href;
+      setFullUrl(`${currentUrl}${postId}`);
+    }
+  }, [postId]);
 
-  // const fullUrl = `${url}${postId}`;
-
-  // const handleCopy = async () => {
-  //   try {
-  //     await navigator.clipboard.writeText(fullUrl);
-  //     toast.success("Url copied", {
-  //       className: " !text-green-500",
-  //       duration: 3000,
-  //     });
-
-  //     setIsOpen(false);
-  //   } catch (err) {
-  //     toast.error("Coudln't copy url", {
-  //       className: " !text-red-500",
-  //       duration: 3000,
-  //     });
-  //   }
-  // };
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(fullUrl);
+      toast.success("URL copied", {
+        className: " !text-green-500",
+        duration: 3000,
+      });
+      setIsOpen(false);
+    } catch (err) {
+      toast.error("Couldn't copy URL", {
+        className: " !text-red-500",
+        duration: 3000,
+      });
+    }
+  };
 
   const handleLike = async () => {
-    setIsLoading(true);
     const type = likes.includes(user.userId) ? "unlike" : "like";
 
     const res = await likeUnlikePost(postId, type, user.userId);
 
     setLikes(res);
-    setIsLoading(false);
   };
 
   const handleRepost = () => {
@@ -94,22 +100,22 @@ const PostFeatures = ({ postId, user, comments }: PostFeaturesType) => {
             <Send className="w-4 h-4 sm:w-6 sm:h-6" /> Send
           </DialogTrigger>
 
-          {/* <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md shadow-lg">
-          <DialogHeader>
-            <DialogTitle className="sr-only">Post share link</DialogTitle>
-          </DialogHeader>
+          <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md shadow-lg">
+            <DialogHeader>
+              <DialogTitle className="sr-only">Post share link</DialogTitle>
+            </DialogHeader>
 
-          <p className="bg-gray-300 px-3 py-2 rounded-md max-w-[200px] sm:max-w-max overflow-hidden">
-            {fullUrl}
-          </p>
-          <Button
-            variant="outline"
-            className="cursor-pointer"
-            onClick={handleCopy}
-          >
-            Copy
-          </Button>
-        </DialogContent> */}
+            <p className="bg-gray-300 px-3 py-2 rounded-md max-w-[200px] sm:max-w-max overflow-hidden">
+              {fullUrl}
+            </p>
+            <Button
+              variant="outline"
+              className="cursor-pointer"
+              onClick={handleCopy}
+            >
+              Copy
+            </Button>
+          </DialogContent>
         </Dialog>
       </div>
 

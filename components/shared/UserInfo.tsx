@@ -13,6 +13,14 @@ const UserInfo = async ({
   const userPostsLength =
     posts.filter((post) => post.user.userId === user?.id).length || 0;
 
+  const userCommentsLength = posts.reduce((count, post) => {
+    const comments = post.comments ?? [];
+    const userComments = comments.filter(
+      (comment) => comment.user.userId === user?.id
+    );
+    return count + userComments.length;
+  }, 0);
+
   return (
     <div className="relative bg-white rounded-md p-4 flex flex-col items-center">
       <Image
@@ -33,7 +41,7 @@ const UserInfo = async ({
       </p>
 
       <p className="flex justify-between w-full text-gray-500">
-        Comments <span className="text-blue-300">0</span>
+        Comments <span className="text-blue-300">{userCommentsLength}</span>
       </p>
     </div>
   );

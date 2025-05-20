@@ -81,6 +81,7 @@ const PostFeed = async ({
               postId={post._id}
               comments={post.comments}
               user={clientUser as SafeUser}
+              defaultLikes={post.likes || []}
             />
           </article>
         ))}

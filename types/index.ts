@@ -15,7 +15,7 @@ export type CommentType = {
   _id: string;
   user: {
     firstname: string;
-    lastname: string;
+    lastname?: string;
     avatar: string;
     userId: string;
   };
@@ -27,7 +27,7 @@ export type FetchedPostType = PostType & {
   _id: string;
   createdAt: string;
   updatedAt: string;
-  comments?: CommentType[];
+  comments: CommentType[] | undefined;
 };
 
 export type SafeUser = {

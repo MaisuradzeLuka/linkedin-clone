@@ -16,6 +16,7 @@ const CreateComment = ({
 }) => {
   const { user } = useUser();
   const [commentValue, setCommentValue] = useState("");
+  const [loading, setLoading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
@@ -39,6 +40,8 @@ const CreateComment = ({
       comment: commentValue,
     };
 
+    setLoading(true);
+
     const newComment = await createComment(commentBody, postId);
 
     if (newComment) {
@@ -56,6 +59,8 @@ const CreateComment = ({
         duration: 3000,
       });
     }
+
+    setLoading(false);
   };
 
   return (
@@ -88,10 +93,11 @@ const CreateComment = ({
 
           {commentValue && (
             <button
+              disabled={loading}
               type="submit"
               className="self-end mt-4 mb-2 mr-2 bg-blue-600 px-3 py-[2px] rounded-2xl text-white font-medium cursor-pointer"
             >
-              Comment
+              {loading ? "Loading..." : "Comment"}
             </button>
           )}
         </div>
