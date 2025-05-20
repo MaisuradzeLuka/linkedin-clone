@@ -10,7 +10,7 @@ const page = async () => {
   const user = await currentUser();
   const posts: FetchedPostType[] = await getPosts();
 
-  console.log(posts[0].comments);
+  console.log(posts);
 
   return (
     <div className="grid grid-cols-8 gap-2 mt-6">

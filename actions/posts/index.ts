@@ -2,13 +2,14 @@
 
 import connectToDb from "@/mongodb";
 import { Post } from "@/mongodb/schemas/Post";
+import { Comment } from "@/mongodb/schemas/Comment";
 import { CommentType, FetchedPostType, PostType, SafeUser } from "@/types";
 import { revalidatePath } from "next/cache";
 
 export const getPosts = async () => {
-  try {
-    await connectToDb();
+  await connectToDb();
 
+  try {
     const posts = await Post.find()
       .sort({ createdAt: -1 })
       .populate({
@@ -70,9 +71,9 @@ export const likeUnlikePost = async (
   type: "like" | "unlike",
   userId: string
 ) => {
-  try {
-    await connectToDb();
+  await connectToDb();
 
+  try {
     if (type === "like") {
       const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
