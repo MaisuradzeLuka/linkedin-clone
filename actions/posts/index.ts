@@ -90,6 +90,8 @@ export const likeUnlikePost = async (
 
       return updatedPost.likes;
     }
+
+    revalidatePath("/");
   } catch (error: any) {
     throw new Error(`Error while liking/unliking post: ${error.message}`);
   }
