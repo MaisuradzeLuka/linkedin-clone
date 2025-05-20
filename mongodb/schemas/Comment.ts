@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const comment = new mongoose.Schema(
+const commentSchema = new mongoose.Schema(
   {
     user: {
       firstname: { type: String, required: true },
@@ -16,4 +16,5 @@ const comment = new mongoose.Schema(
 );
 
 export const CommentSchema =
-  mongoose.models.CommentSchema || mongoose.model("CommentSchema", comment);
+  mongoose.models.CommentSchema ||
+  mongoose.model("CommentSchema", commentSchema);
