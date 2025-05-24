@@ -57,7 +57,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
     if (imageError || postValueError) return;
 
     setIsLoading(true);
-    const newPost = await createPost(postValue, user, image);
+    const newPost = await createPost(postValue, user._id, image);
 
     if (newPost) {
       toast.success("Post created!", {

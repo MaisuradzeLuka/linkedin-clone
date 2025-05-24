@@ -1,25 +1,30 @@
 import { getPosts } from "@/actions/posts";
+import { createOrGetUser } from "@/actions/user";
 import MostPopularPost from "@/components/shared/MostPopularPost";
 import PostFeed from "@/components/shared/PostFeed";
 import UserInfo from "@/components/shared/UserInfo";
 import { FetchedPostType } from "@/types";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
+
 import React from "react";
 
 const page = async () => {
-  const user = await currentUser();
-  const posts: FetchedPostType[] = await getPosts();
+  const user = await auth();
 
-  console.log(posts);
+  const existingUser = await createOrGetUser({
+    get: { userId: user.userId || "" },
+  });
+
+  const posts: FetchedPostType[] = await getPosts();
 
   return (
     <div className="grid grid-cols-8 gap-2 mt-6">
       <section className="hidden md:inline col-span-2">
-        <UserInfo posts={posts} user={user} />
+        <UserInfo posts={posts} user={existingUser} />
       </section>
 
       <section className="col-span-8 md:col-span-6 lg:col-span-4">
-        <PostFeed posts={posts} user={user} />
+        <PostFeed posts={posts} user={existingUser} />
       </section>
 
       <section className="hidden lg:inline col-span-2">

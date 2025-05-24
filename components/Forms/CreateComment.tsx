@@ -1,6 +1,6 @@
 import { createComment } from "@/actions/comments";
 import { getTimeAgo } from "@/lib/utils";
-import { CommentType } from "@/types";
+import { CommentType, SafeUser } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
@@ -9,11 +9,12 @@ import { toast } from "sonner";
 const CreateComment = ({
   postId,
   comments,
+  user,
 }: {
   postId: string;
   comments?: CommentType[];
+  user: SafeUser;
 }) => {
-  const { user } = useUser();
   const [commentValue, setCommentValue] = useState("");
   const [loading, setLoading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -31,10 +32,11 @@ const CreateComment = ({
 
     const commentBody = {
       user: {
-        firstname: user?.firstName,
-        lastname: user?.firstName,
-        userId: user?.id,
-        avatar: user?.imageUrl,
+        firstname: user.firstname,
+        lastname: user.firstname,
+        userId: user.userId,
+        avatar: user.avatar,
+        _id: user._id,
       },
       comment: commentValue,
     };
@@ -69,7 +71,7 @@ const CreateComment = ({
     >
       <div className="flex items-center gap-2">
         <Image
-          src={user?.imageUrl || ""}
+          src={user.avatar}
           width={35}
           height={35}
           alt="user avatar"

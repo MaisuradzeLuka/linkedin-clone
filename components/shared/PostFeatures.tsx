@@ -24,10 +24,10 @@ type PostFeaturesType = {
 };
 
 const PostFeatures = ({
-  postId,
   user,
-  comments,
   defaultLikes,
+  postId,
+  comments,
 }: PostFeaturesType) => {
   const [isOpen, setIsOpen] = useState(false);
   const [likes, setLikes] = useState<string[]>(defaultLikes);
@@ -64,6 +64,7 @@ const PostFeatures = ({
 
     setLikes(res);
   };
+
   const handleRepost = () => {
     // Handle repost functionality here
   };
@@ -118,7 +119,9 @@ const PostFeatures = ({
         </Dialog>
       </div>
 
-      {showForm && <CreateComment postId={postId} comments={comments} />}
+      {showForm && (
+        <CreateComment postId={postId} user={user} comments={comments} />
+      )}
     </div>
   );
 };

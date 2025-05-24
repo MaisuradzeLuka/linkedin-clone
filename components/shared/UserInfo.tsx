@@ -1,22 +1,22 @@
 import { User } from "@clerk/nextjs/server";
 import Image from "next/image";
 
-import { FetchedPostType } from "@/types";
+import { FetchedPostType, SafeUser } from "@/types";
 
 const UserInfo = async ({
   posts,
   user,
 }: {
   posts: FetchedPostType[];
-  user: User | null;
+  user: SafeUser;
 }) => {
   const userPostsLength =
-    posts.filter((post) => post.user.userId === user?.id).length || 0;
+    posts.filter((post) => post.user.userId === user?.userId).length || 0;
 
   const userCommentsLength = posts.reduce((count, post) => {
     const comments = post.comments ?? [];
     const userComments = comments.filter(
-      (comment) => comment.user.userId === user?.id
+      (comment) => comment.user.userId === user?.userId
     );
     return count + userComments.length;
   }, 0);
@@ -24,15 +24,17 @@ const UserInfo = async ({
   return (
     <div className="relative bg-white rounded-md p-4 flex flex-col items-center">
       <Image
-        src={user?.imageUrl!}
+        src={user?.avatar!}
         width={80}
         height={80}
         alt="user avatar"
         className="!rounded-full h-20 w-20"
       />
 
-      <h3 className="text-lg font-semibold mt-5">{user?.fullName}</h3>
-      <p className="text-gray-500">@{user?.fullName}</p>
+      <h3 className="text-lg font-semibold mt-5">
+        {user?.firstname} {user?.lastname}
+      </h3>
+      <p className="text-gray-500">@{user?.username}</p>
 
       <div className="absolute bottom-22 w-full h-[1px] bg-gray-300" />
 

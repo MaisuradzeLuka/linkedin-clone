@@ -10,19 +10,26 @@ export const createComment = async (commentBody: any, postId: string) => {
   await connectToDb();
 
   try {
-    const newComment = await Comment.create(commentBody);
+    const comment = new Comment(commentBody);
 
-    await Post.findByIdAndUpdate(
-      { _id: postId },
-      {
-        $push: { comments: newComment._id },
-      }
-    );
+    await comment.save();
+    await comment.populate({
+      path: "user",
+      select: "username avatar",
+    });
+
+    await Post.findByIdAndUpdate(postId, {
+      $push: { comments: comment._id },
+    });
 
     const plainComment = {
-      ...newComment.toObject(),
-      _id: newComment._id.toString(),
-      createdAt: newComment.createdAt?.toString(),
+      ...comment.toObject(),
+      _id: comment._id.toString(),
+      createdAt: comment.createdAt?.toString(),
+      user: {
+        ...comment.user.toObject(),
+        _id: comment.user._id.toString(),
+      },
     };
 
     revalidatePath("/");

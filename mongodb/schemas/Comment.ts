@@ -3,10 +3,8 @@ import mongoose from "mongoose";
 const commentSchema = new mongoose.Schema(
   {
     user: {
-      firstname: { type: String, required: true },
-      lastname: { type: String },
-      avatar: { type: String, required: true },
-      userId: { type: String, required: true },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     comment: { type: String, required: true },
   },

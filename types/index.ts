@@ -1,11 +1,6 @@
 export type PostType = {
   text: string;
-  user: {
-    firstname: string;
-    lastname?: string;
-    avatar: string;
-    userId: string;
-  };
+  user: SafeUser;
   postImage?: String;
   likes?: string[];
 };
@@ -13,6 +8,7 @@ export type PostType = {
 export type CommentType = {
   _id: string;
   user: {
+    _id: any;
     firstname: string;
     lastname?: string;
     avatar: string;
@@ -30,8 +26,10 @@ export type FetchedPostType = PostType & {
 };
 
 export type SafeUser = {
+  _id: string;
   userId: string;
   firstname: string | null;
   lastname: string | null;
   avatar: string;
+  username?: string;
 };

@@ -2,8 +2,7 @@
 
 import connectToDb from "@/mongodb";
 import { Post } from "@/mongodb/schemas/Post";
-import { Comment } from "@/mongodb/schemas/Comment";
-import { CommentType, FetchedPostType, PostType, SafeUser } from "@/types";
+import { CommentType, FetchedPostType } from "@/types";
 import { revalidatePath } from "next/cache";
 
 export const getPosts = async () => {
@@ -12,11 +11,16 @@ export const getPosts = async () => {
   try {
     const posts = await Post.find()
       .sort({ createdAt: -1 })
-      .populate({
-        path: "comments",
-
-        options: { sort: { createdAt: -1 } },
-      })
+      .populate([
+        {
+          path: "user",
+        },
+        {
+          path: "comments",
+          options: { sort: { createdAt: -1 } },
+          populate: { path: "user" },
+        },
+      ])
       .lean<FetchedPostType[]>();
 
     return posts.map((post) => ({
@@ -24,6 +28,7 @@ export const getPosts = async () => {
       _id: post._id.toString(),
       comments: post.comments?.map((comment: CommentType) => ({
         ...comment,
+        user: { ...comment.user, _id: comment.user._id.toString() },
         _id: comment._id.toString(),
       })),
     }));
@@ -34,17 +39,12 @@ export const getPosts = async () => {
 
 export const createPost = async (
   postValue: string,
-  user: SafeUser,
+  user: string,
   image?: string
 ) => {
-  const postBody: PostType = {
+  const postBody = {
     text: postValue,
-    user: {
-      firstname: user.firstname ?? "",
-      lastname: user.lastname ?? "",
-      avatar: user.avatar,
-      userId: user.userId,
-    },
+    user: user,
     postImage: image,
   };
 

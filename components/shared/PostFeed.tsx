@@ -10,13 +10,14 @@ const PostFeed = async ({
   user,
 }: {
   posts: FetchedPostType[];
-  user: User | null;
+  user: SafeUser;
 }) => {
   const clientUser = {
-    firstname: user?.firstName ?? "",
-    lastname: user?.lastName ?? "",
-    avatar: user?.imageUrl,
-    userId: user?.id,
+    firstname: user.firstname ?? "",
+    lastname: user.lastname ?? "",
+    avatar: user.avatar,
+    userId: user.userId,
+    _id: user._id,
   };
 
   return (
@@ -46,8 +47,7 @@ const PostFeed = async ({
                 </h3>
 
                 <span className="text-sm text-gray-500">
-                  @{post?.user.firstname}
-                  {post?.user.lastname}
+                  @{post?.user.username}
                 </span>
 
                 <span className="text-gray-500 text-sm">
@@ -80,7 +80,7 @@ const PostFeed = async ({
             <PostFeatures
               postId={post._id}
               comments={post.comments}
-              user={clientUser as SafeUser}
+              user={clientUser}
               defaultLikes={post.likes || []}
             />
           </article>
