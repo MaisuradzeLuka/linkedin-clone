@@ -37,3 +37,29 @@ export function trimString(string: string) {
   }
   return string;
 }
+
+export async function imageToBase64(file: File | undefined) {
+  if (!file) {
+    return { status: "ERROR", body: "No file provided" };
+  }
+
+  if (file.size > 500 * 1024) {
+    return { status: "ERROR", body: "Image must be less than 500 kb" };
+  }
+
+  try {
+    const base64String = await readFileAsBase64(file);
+    return { status: "SUCCESS", body: base64String };
+  } catch {
+    return { status: "ERROR", body: "Failed to read file" };
+  }
+}
+
+function readFileAsBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}

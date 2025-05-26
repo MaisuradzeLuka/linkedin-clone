@@ -35,4 +35,32 @@
     white-space: nowrap;
     border: 0;
   }
+
+  .image-hover {
+    @apply hidden w-full h-full absolute bottom-0 right-0 bg-black/40  p-2 group-hover:flex items-center justify-center transition;
+  }
+
+  .avatar {
+    @apply w-22 h-22 md:w-25 md:h-25 !rounded-full p-[2px] bg-gray-400 mt-8;
+
+    img {
+      @apply w-full h-full rounded-full;
+    }
+
+    div {
+      @apply rounded-full;
+    }
+  }
+
+  .backgroundImg {
+    @apply w-full md:w-[700px] h-[230px];
+
+    img {
+      @apply rounded-4xl h-full;
+    }
+
+    div {
+      @apply rounded-4xl;
+    }
+  }
 }

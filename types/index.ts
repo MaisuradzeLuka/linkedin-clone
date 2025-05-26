@@ -32,4 +32,6 @@ export type SafeUser = {
   lastname: string | null;
   avatar: string;
   username?: string;
+  bio?: string;
+  backgroundImage?: string;
 };

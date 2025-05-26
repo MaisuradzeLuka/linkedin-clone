@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { createPost } from "@/actions/posts";
 import { toast } from "sonner";
 import { SafeUser } from "@/types";
+import { imageToBase64 } from "@/lib/utils";
 
 const CreatePost = ({ user }: { user: SafeUser }) => {
   const [postValue, setPostValue] = useState("");
@@ -14,22 +15,17 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
   const [imageError, setImageError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const onImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
 
-    if (file) {
-      if (file.size > 500 * 1024) {
-        setImageError("Image must be less than 500 kb");
-        return;
-      }
+    const image = await imageToBase64(file);
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setImage(base64String);
-        if (imageError) setImageError("");
-      };
-      reader.readAsDataURL(file);
+    if (image.status === "ERROR") {
+      setImageError(image.body);
+      return;
+    } else {
+      setImage(image.body);
+      if (imageError) setImageError("");
     }
   };
 
