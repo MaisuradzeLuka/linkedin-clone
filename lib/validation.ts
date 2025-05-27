@@ -11,6 +11,6 @@ export const editUserValidation = z.object({
   firstname: z.string().min(2),
   lastname: z.string().min(2),
   avatar: z.string(),
-  backgroundImg: z.string(),
+  backgroundImg: z.string().optional(),
   bio: z.string().max(255).optional(),
 });

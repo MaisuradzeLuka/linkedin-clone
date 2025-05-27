@@ -7,11 +7,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const page = async () => {
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const user = await auth();
+  const { id } = await params;
 
   const existingUser: SafeUser = await createOrGetUser({
-    get: { userId: user.userId || "" },
+    get: { userId: id },
   });
 
   const posts: FetchedPostType[] = await getPosts();
@@ -20,11 +21,13 @@ const page = async () => {
     (post) => post.user.userId === existingUser.userId
   );
 
+  const showCreatePosts = id === user.userId;
+
   return (
     <div className="flex flex-col items-center mt-10">
       <section className="w-full md:w-max">
         <img
-          src="/assets/1616872522462.jpg"
+          src={existingUser.backgroundImg}
           alt="user background"
           className="w-full md:w-[700px] rounded-4xl object-cover h-[230px]"
         />
@@ -73,7 +76,11 @@ const page = async () => {
       </section>
 
       <section className="w-full md:w-[700px] mt-8">
-        <PostFeed posts={filteredPosts} user={existingUser} />
+        <PostFeed
+          showCreatePost={showCreatePosts}
+          posts={filteredPosts}
+          user={existingUser}
+        />
       </section>
     </div>
   );

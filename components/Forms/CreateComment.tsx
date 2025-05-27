@@ -3,6 +3,7 @@ import { getTimeAgo } from "@/lib/utils";
 import { CommentType, SafeUser } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -70,13 +71,15 @@ const CreateComment = ({
       className="flex-1 flex flex-col mt-4"
     >
       <div className="flex items-center gap-2">
-        <Image
-          src={user.avatar}
-          width={35}
-          height={35}
-          alt="user avatar"
-          className="rounded-full self-start"
-        />
+        <Link href={user.userId}>
+          <Image
+            src={user.avatar}
+            width={35}
+            height={35}
+            alt="user avatar"
+            className="rounded-full self-start"
+          />
+        </Link>
 
         <div
           className={`flex-1 flex flex-col justify-center px-1 border-[2px]  border-gray-400 min-h-9 rounded-2xl outline-0 text-gray-600 ${

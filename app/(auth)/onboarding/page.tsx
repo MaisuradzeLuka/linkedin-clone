@@ -46,8 +46,6 @@ const Onboarding = () => {
   }, [user, form]);
 
   const onSubmit = async (data: z.infer<typeof userValidation>) => {
-    console.log(data);
-
     const res = await createOrGetUser({
       create: {
         firstname: data.firstname,
@@ -55,6 +53,7 @@ const Onboarding = () => {
         username: data.username,
         bio: data.bio,
         avatar: user?.imageUrl || "",
+        backgroundImg: "/assets/1616872522462.jpg",
         userId: user?.id!,
       },
     });

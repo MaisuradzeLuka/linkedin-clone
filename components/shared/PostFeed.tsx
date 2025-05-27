@@ -4,13 +4,16 @@ import { FetchedPostType, SafeUser } from "@/types";
 import { getTimeAgo } from "@/lib/utils";
 import PostFeatures from "./PostFeatures";
 import { User } from "@clerk/nextjs/server";
+import Link from "next/link";
 
 const PostFeed = async ({
   posts,
   user,
+  showCreatePost = true,
 }: {
   posts: FetchedPostType[];
   user: SafeUser;
+  showCreatePost?: boolean;
 }) => {
   const clientUser = {
     firstname: user.firstname ?? "",
@@ -22,7 +25,7 @@ const PostFeed = async ({
 
   return (
     <div className="flex flex-col gap-2">
-      <CreatePost user={clientUser as SafeUser} />
+      {showCreatePost && <CreatePost user={clientUser as SafeUser} />}
 
       <div className="w-full h-[1px] bg-gray-300 mt-2" />
 
@@ -34,13 +37,15 @@ const PostFeed = async ({
               className="p-4 border-b bg-white rounded-md border-gray-200"
             >
               <div className="flex items-start gap-2">
-                <Image
-                  src={post?.user.avatar}
-                  width={48}
-                  height={48}
-                  alt="user avatar"
-                  className="rounded-full w-12 h-12"
-                />
+                <Link href={`/user/${user.userId}`}>
+                  <Image
+                    src={post?.user.avatar}
+                    width={48}
+                    height={48}
+                    alt="user avatar"
+                    className="rounded-full w-12 h-12"
+                  />
+                </Link>
 
                 <div className="flex flex-col">
                   <h3 className="font-semibold">

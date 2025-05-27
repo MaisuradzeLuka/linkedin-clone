@@ -1,4 +1,4 @@
-import { getTimeAgo } from "@/lib/utils";
+import { getTimeAgo, trimString } from "@/lib/utils";
 import { FetchedPostType } from "@/types";
 import Image from "next/image";
 import React from "react";
@@ -40,7 +40,7 @@ const MostPopularPost = ({ posts }: { posts: FetchedPostType[] }) => {
         </div>
       </div>
 
-      <p className="text-gray-700 mt-2">{post?.text}</p>
+      <p className="text-gray-700 mt-2">{trimString(post?.text, 200)}</p>
 
       {post?.postImage && (
         <img

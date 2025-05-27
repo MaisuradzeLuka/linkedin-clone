@@ -9,6 +9,7 @@ type CreateUserInput = {
   username: string;
   bio?: string;
   avatar: string;
+  backgroundImg?: string;
   userId: string;
 };
 
@@ -17,10 +18,11 @@ type GetUserInput = {
 };
 
 type UserType =
-  | { create: CreateUserInput; get?: undefined }
-  | { get: GetUserInput; create?: undefined };
+  | { create: CreateUserInput; get?: undefined; update?: undefined }
+  | { get: GetUserInput; create?: undefined; update?: undefined }
+  | { update: CreateUserInput; create?: undefined; get?: undefined };
 
-export const createOrGetUser = async ({ create, get }: UserType) => {
+export const createOrGetUser = async ({ create, get, update }: UserType) => {
   await connectToDb();
 
   try {
@@ -43,6 +45,19 @@ export const createOrGetUser = async ({ create, get }: UserType) => {
 
       const newUser = await User.create(create);
       return { ...newUser.toObject(), _id: newUser._id.toString() };
+    }
+
+    if (update) {
+      const updatedUser = await User.findOneAndUpdate(
+        { userId: update.userId },
+        { ...update }
+      );
+
+      if (updatedUser) {
+        return { status: "SUCCESS" };
+      } else {
+        return { message: "User not found" };
+      }
     }
 
     return { message: "Invalid input" };

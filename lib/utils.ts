@@ -31,9 +31,9 @@ export function getTimeAgo(dateInput: Date | string): string {
   return `${years} year${years > 1 ? "s" : ""} ago`;
 }
 
-export function trimString(string: string) {
-  if (string.length > 250) {
-    return string.slice(0, 250) + "...";
+export function trimString(string: string, length: number) {
+  if (string.length > length) {
+    return string.slice(0, length) + "...";
   }
   return string;
 }
@@ -43,8 +43,8 @@ export async function imageToBase64(file: File | undefined) {
     return { status: "ERROR", body: "No file provided" };
   }
 
-  if (file.size > 500 * 1024) {
-    return { status: "ERROR", body: "Image must be less than 500 kb" };
+  if (file.size > 700 * 1024) {
+    return { status: "ERROR", body: "Image must be less than 700 kb" };
   }
 
   try {
