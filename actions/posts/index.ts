@@ -2,51 +2,47 @@
 
 import connectToDb from "@/mongodb";
 import { Post } from "@/mongodb/schemas/Post";
-import { Comment } from "@/mongodb/schemas/Comment";
-import { FetchedPostType } from "@/types";
+import { CommentType, FetchedPostType } from "@/types";
+import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
+import { registerModels } from "../models";
+
+registerModels();
 
 export const getPosts = async () => {
   await connectToDb();
+
+  console.log("Registered models:", Object.keys(mongoose.models));
 
   try {
     const posts = await Post.find()
       .sort({ createdAt: -1 })
       .populate([
-        { path: "user" },
+        {
+          path: "user",
+        },
         {
           path: "comments",
           options: { sort: { createdAt: -1 } },
           populate: { path: "user" },
         },
       ])
-      .lean();
+      .lean<FetchedPostType[]>();
 
-    const serializedPosts = posts.map((post: any) => ({
+    return posts.map((post) => ({
       ...post,
       _id: post._id.toString(),
-      user: {
-        ...post.user,
-        _id: post.user._id.toString(),
-      },
-      comments: post.comments?.map((comment: any) => ({
+      comments: post.comments?.map((comment: CommentType) => ({
         ...comment,
+        user: { ...comment.user, _id: comment.user._id.toString() },
         _id: comment._id.toString(),
-        user:
-          comment.user && typeof comment.user === "object"
-            ? {
-                ...comment.user,
-                _id: comment.user._id.toString(),
-              }
-            : comment.user?.toString(),
       })),
     }));
-
-    return serializedPosts;
   } catch (error: any) {
     throw new Error(`Failed while getting posts: ${error.message}`);
   }
 };
+
 export const createPost = async (
   postValue: string,
   user: string,
