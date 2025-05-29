@@ -75,7 +75,7 @@ const page = () => {
     });
 
     if (updatedUser.status === "SUCCESS") {
-      redirect("/userprofile");
+      redirect(`/user/${userId}`);
     } else {
       toast.error("Couldn't update user", {
         description: "Please try again later.",

@@ -3,7 +3,6 @@ import CreatePost from "../Forms/CreatePost";
 import { FetchedPostType, SafeUser } from "@/types";
 import { getTimeAgo } from "@/lib/utils";
 import PostFeatures from "./PostFeatures";
-import { User } from "@clerk/nextjs/server";
 import Link from "next/link";
 
 const PostFeed = async ({
@@ -37,7 +36,7 @@ const PostFeed = async ({
               className="p-4 border-b bg-white rounded-md border-gray-200"
             >
               <div className="flex items-start gap-2">
-                <Link href={`/user/${user.userId}`}>
+                <Link href={`/user/${post.user.userId}`}>
                   <Image
                     src={post?.user.avatar}
                     width={48}
