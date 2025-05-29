@@ -12,18 +12,16 @@ export const getPosts = async () => {
     const posts = await Post.find()
       .sort({ createdAt: -1 })
       .populate([
-        {
-          path: "user",
-        },
+        { path: "user" },
         {
           path: "comments",
           options: { sort: { createdAt: -1 } },
           populate: { path: "user" },
         },
       ])
-      .lean<FetchedPostType[]>();
+      .lean();
 
-    return posts.map((post) => ({
+    const serializedPosts = posts.map((post: any) => ({
       ...post,
       _id: post._id.toString(),
       user: {
@@ -33,17 +31,21 @@ export const getPosts = async () => {
       comments: post.comments?.map((comment: any) => ({
         ...comment,
         _id: comment._id.toString(),
-        user: {
-          ...comment.user,
-          _id: comment.user._id.toString(),
-        },
+        user:
+          comment.user && typeof comment.user === "object"
+            ? {
+                ...comment.user,
+                _id: comment.user._id.toString(),
+              }
+            : comment.user?.toString(),
       })),
     }));
+
+    return serializedPosts;
   } catch (error: any) {
     throw new Error(`Failed while getting posts: ${error.message}`);
   }
 };
-
 export const createPost = async (
   postValue: string,
   user: string,
