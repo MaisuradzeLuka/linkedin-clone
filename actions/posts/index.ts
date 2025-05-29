@@ -2,7 +2,7 @@
 
 import connectToDb from "@/mongodb";
 import { Post } from "@/mongodb/schemas/Post";
-import { CommentType, FetchedPostType } from "@/types";
+import { FetchedPostType } from "@/types";
 import { revalidatePath } from "next/cache";
 
 export const getPosts = async () => {
@@ -26,10 +26,17 @@ export const getPosts = async () => {
     return posts.map((post) => ({
       ...post,
       _id: post._id.toString(),
-      comments: post.comments?.map((comment: CommentType) => ({
+      user: {
+        ...post.user,
+        _id: post.user._id.toString(),
+      },
+      comments: post.comments?.map((comment: any) => ({
         ...comment,
-        user: { ...comment.user, _id: comment.user._id.toString() },
         _id: comment._id.toString(),
+        user: {
+          ...comment.user,
+          _id: comment.user._id.toString(),
+        },
       })),
     }));
   } catch (error: any) {
