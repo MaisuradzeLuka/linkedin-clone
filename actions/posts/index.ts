@@ -2,6 +2,7 @@
 
 import connectToDb from "@/mongodb";
 import { Post } from "@/mongodb/schemas/Post";
+import { Comment } from "@/mongodb/schemas/Comment";
 import { FetchedPostType } from "@/types";
 import { revalidatePath } from "next/cache";
 
