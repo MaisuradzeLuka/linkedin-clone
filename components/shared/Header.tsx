@@ -11,12 +11,9 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
 function Header() {
   const { userId } = useAuth();
-
-  const params = useSearchParams();
 
   return (
     <div className="flex items-center justify-between p-2 max-w-6xl mx-auto">
