@@ -21,7 +21,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     (post) => post.user.userId === existingUser.userId
   );
 
-  const showCreatePosts = id === user.userId;
+  const isAuthenticated = id === user.userId;
 
   return (
     <div className="flex flex-col items-center mt-10">
@@ -41,12 +41,14 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             className="w-22 h-22 md:w-25 md:h-25 rounded-full p-[2px] bg-gray-400 -mt-12"
           />
 
-          <Link
-            href="/userprofile/edit"
-            className="px-3 py-[6px] text-sm md:text-md font-medium rounded-full border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition"
-          >
-            რედაქტირება
-          </Link>
+          {isAuthenticated && (
+            <Link
+              href={`/user/${id}/edit`}
+              className="px-3 py-[6px] text-sm md:text-md font-medium rounded-full border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition"
+            >
+              რედაქტირება
+            </Link>
+          )}
         </div>
 
         <div className="flex flex-col mt-8">
@@ -77,7 +79,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       <section className="w-full md:w-[700px] mt-8">
         <PostFeed
-          showCreatePost={showCreatePosts}
+          showCreatePost={isAuthenticated}
           posts={filteredPosts}
           user={existingUser}
         />

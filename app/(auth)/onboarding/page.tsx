@@ -66,104 +66,90 @@ const Onboarding = () => {
   };
   return (
     <Form {...form}>
-      <div className="flex flex-col min-w-[360px] w-full max-w-[500px]  bg-[#F7F7F7] box-shadow rounded-xl">
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col items-center gap-4 bg-white text-[#25252b] box-shadow rounded-xl py-8 px-10"
+      {/* <div className="flex flex-col min-w-[360px] w-full max-w-[500px]  bg-[#F7F7F7] box-shadow rounded-xl"> */}
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col items-center gap-4 bg-white text-[#25252b] box-shadow rounded-xl py-8 px-10"
+      >
+        <h2 className="font-bold text-[16px] mb-6">
+          Finish setting up you account
+        </h2>
+
+        <Image
+          src={user?.imageUrl || ""}
+          alt="user avatar"
+          width={48}
+          height={48}
+          className="rounded-full"
+        />
+
+        <FormField
+          name="firstname"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Firstname</FormLabel>
+
+              <FormControl>
+                <Input className="w-full !ring-0 border-gray-300" {...field} />
+              </FormControl>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="lastname"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Lastname</FormLabel>
+
+              <FormControl>
+                <Input className="w-full !ring-0 border-gray-300" {...field} />
+              </FormControl>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="username"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Username</FormLabel>
+
+              <FormControl>
+                <Input className="w-full !ring-0 border-gray-300" {...field} />
+              </FormControl>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="Bio"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Bio</FormLabel>
+
+              <FormControl>
+                <Textarea
+                  className="w-full !ring-0 border-gray-300 resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+
+        <Button
+          type="submit"
+          className="w-full bg-[#3B3C45] text-white cursor-pointer"
         >
-          <h2 className="font-bold text-[16px] mb-6">
-            Finish setting up you account
-          </h2>
-
-          <Image
-            src={user?.imageUrl || ""}
-            alt="user avatar"
-            width={48}
-            height={48}
-            className="rounded-full"
-          />
-
-          <FormField
-            name="firstname"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Firstname</FormLabel>
-
-                <FormControl>
-                  <Input
-                    className="w-full !ring-0 border-gray-300"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-red-500" />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            name="lastname"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Lastname</FormLabel>
-
-                <FormControl>
-                  <Input
-                    className="w-full !ring-0 border-gray-300"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-red-500" />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            name="username"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Username</FormLabel>
-
-                <FormControl>
-                  <Input
-                    className="w-full !ring-0 border-gray-300"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-red-500" />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            name="Bio"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Bio</FormLabel>
-
-                <FormControl>
-                  <Textarea
-                    className="w-full !ring-0 border-gray-300 resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-red-500" />
-              </FormItem>
-            )}
-          />
-
-          <Button
-            type="submit"
-            className="w-full bg-[#3B3C45] text-white cursor-pointer"
-          >
-            Continue
-          </Button>
-        </form>
-
-        <Link href="/" className=" my-3 text-center text-blue-400">
-          Skip
-        </Link>
-      </div>
+          Continue
+        </Button>
+      </form>
     </Form>
   );
 };

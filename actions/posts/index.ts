@@ -15,22 +15,22 @@ export const getPosts = async () => {
         {
           path: "user",
         },
-        {
-          path: "comments",
-          options: { sort: { createdAt: -1 } },
-          populate: { path: "user" },
-        },
+        // {
+        //   path: "comments",
+        //   options: { sort: { createdAt: -1 } },
+        //   populate: { path: "user" },
+        // },
       ])
       .lean<FetchedPostType[]>();
 
     return posts.map((post) => ({
       ...post,
       _id: post._id.toString(),
-      comments: post.comments?.map((comment: CommentType) => ({
-        ...comment,
-        user: { ...comment.user, _id: comment.user._id.toString() },
-        _id: comment._id.toString(),
-      })),
+      // comments: post.comments?.map((comment: CommentType) => ({
+      //   ...comment,
+      //   user: { ...comment.user, _id: comment.user._id.toString() },
+      //   _id: comment._id.toString(),
+      // })),
     }));
   } catch (error: any) {
     throw new Error(`Failed while getting posts: ${error.message}`);

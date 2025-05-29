@@ -160,7 +160,7 @@ const page = () => {
         />
 
         <div className="flex items-center gap-4 self-end">
-          <Link href="/" className="text-red-500 font-medium">
+          <Link href={`/user/${userId}`} className="text-red-500 font-medium">
             Cancel
           </Link>
           <Button

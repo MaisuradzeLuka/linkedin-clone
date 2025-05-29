@@ -1,15 +1,23 @@
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+"use client";
+
+import { SignedIn, SignedOut, SignOutButton, useAuth } from "@clerk/nextjs";
 import {
   Briefcase,
   HomeIcon,
   MessagesSquare,
   SearchIcon,
+  User,
   UsersIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 function Header() {
+  const { userId } = useAuth();
+
+  const params = useSearchParams();
+
   return (
     <div className="flex items-center justify-between p-2 max-w-6xl mx-auto">
       <Link href="/">
@@ -34,7 +42,7 @@ function Header() {
       </div>
 
       <div className="flex items-center space-x-4 px-6">
-        <Link href="" className="icon">
+        <Link href="/" className="icon">
           <HomeIcon className="h-5 " />
           <p>Home</p>
         </Link>
@@ -44,9 +52,9 @@ function Header() {
           <p>Network</p>
         </Link>
 
-        <Link href="" className="icon hidden md:flex">
-          <Briefcase className="h-5" />
-          <p>Jobs</p>
+        <Link href={`/user/${userId}`} className="icon hidden md:flex">
+          <User className="h-5" />
+          <p>User</p>
         </Link>
 
         <Link href="" className="icon">
@@ -55,7 +63,9 @@ function Header() {
         </Link>
 
         <SignedIn>
-          <UserButton />
+          <SignOutButton>
+            <div className="cursor-pointer">Log out</div>
+          </SignOutButton>
         </SignedIn>
 
         <SignedOut>
