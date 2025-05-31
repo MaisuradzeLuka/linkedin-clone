@@ -6,8 +6,6 @@ import UserInfo from "@/components/shared/UserInfo";
 import { FetchedPostType } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 
-import React from "react";
-
 const page = async () => {
   const user = await auth();
 

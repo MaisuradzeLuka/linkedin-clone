@@ -119,9 +119,9 @@ const PostFeatures = ({
         </Dialog>
       </div>
 
-      {/* {showForm && (
+      {showForm && (
         <CreateComment postId={postId} user={user} comments={comments} />
-      )} */}
+      )}
     </div>
   );
 };

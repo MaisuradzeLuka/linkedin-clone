@@ -17,14 +17,14 @@ import {
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import Link from "next/link";
 import { createOrGetUser } from "@/actions/user";
 import { redirect } from "next/navigation";
 
 const Onboarding = () => {
   const { user } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof userValidation>>({
     resolver: zodResolver(userValidation),
@@ -46,6 +46,7 @@ const Onboarding = () => {
   }, [user, form]);
 
   const onSubmit = async (data: z.infer<typeof userValidation>) => {
+    setIsLoading(true);
     const res = await createOrGetUser({
       create: {
         firstname: data.firstname,
@@ -63,10 +64,11 @@ const Onboarding = () => {
     } else if (res) {
       redirect("/");
     }
+
+    setIsLoading(false);
   };
   return (
     <Form {...form}>
-      {/* <div className="flex flex-col min-w-[360px] w-full max-w-[500px]  bg-[#F7F7F7] box-shadow rounded-xl"> */}
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="min-w-[360px] w-full max-w-[500px] flex flex-col items-center gap-4 bg-white text-[#25252b] box-shadow rounded-xl py-8 px-10"
@@ -146,8 +148,9 @@ const Onboarding = () => {
         <Button
           type="submit"
           className="w-full bg-[#3B3C45] text-white cursor-pointer"
+          disabled={isLoading}
         >
-          Continue
+          {isLoading ? "Loading..." : "Continue"}
         </Button>
       </form>
     </Form>

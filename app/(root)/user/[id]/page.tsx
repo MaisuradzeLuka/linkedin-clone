@@ -58,22 +58,11 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
           <p className="text-gray-600">@{existingUser.username}</p>
 
-          <p className="max-w-[700px] text-gray-500 mt-2 text-sm lg:text-md">
-            this is a short bio Lorem ipsum dolor sit, amet consectetur
-            adipisicing elit. Animi molestias harum modi quidem quos quam
-            debitis quis sit ipsa, perferendis fugit possimus deserunt nemo
-            quasi corporis culpa non aspernatur accusantium!
-          </p>
-
-          {/* {existingUser.bio && (
-            // <p className="text-gray-500 mt-2">{existingUser.bio}</p>
-            <p className="text-gray-500 mt-2">
-              this is a short bio Lorem ipsum dolor sit, amet consectetur
-              adipisicing elit. Animi molestias harum modi quidem quos quam
-              debitis quis sit ipsa, perferendis fugit possimus deserunt nemo
-              quasi corporis culpa non aspernatur accusantium!
+          {existingUser.bio && (
+            <p className="max-w-[700px] text-gray-500 mt-2 text-sm lg:text-md">
+              {existingUser.bio}
             </p>
-          )} */}
+          )}
         </div>
       </section>
 

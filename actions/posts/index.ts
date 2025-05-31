@@ -12,8 +12,6 @@ registerModels();
 export const getPosts = async () => {
   await connectToDb();
 
-  console.log("Registered models:", Object.keys(mongoose.models));
-
   try {
     const posts = await Post.find()
       .sort({ createdAt: -1 })

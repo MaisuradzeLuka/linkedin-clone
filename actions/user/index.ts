@@ -39,11 +39,17 @@ export const createOrGetUser = async ({ create, get, update }: UserType) => {
       const existingUsername = await User.findOne({
         username: create.username,
       });
+
       if (existingUsername) {
         return { message: "Username already exists" };
       }
 
-      const newUser = await User.create(create);
+      const newUser = await User.findOneAndUpdate(
+        { userId: create.userId },
+        { ...create },
+        { upsert: true, new: true }
+      );
+
       return { ...newUser.toObject(), _id: newUser._id.toString() };
     }
 

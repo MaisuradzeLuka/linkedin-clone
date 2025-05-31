@@ -124,7 +124,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
         {(image || postValue) && (
           <Button
             variant="outline"
-            className="absolute left-0 bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer"
+            className="absolute left-0 bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer text-xs sm:text-sm px-2 "
             type="submit"
             disabled={isLoading}
           >
@@ -132,7 +132,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
           </Button>
         )}
 
-        <label className="bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition border !border-gray-500 py-2 px-4 rounded-md font-semibold text-sm  cursor-pointer">
+        <label className="flex items-center justify-center bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition border !border-gray-500 py-1 px-2 sm:py-2 sm:px-4 rounded-md font-semibold text-xs sm:text-sm  cursor-pointer">
           {image ? "Change image" : "Add image"}
           <input
             type="file"
@@ -147,7 +147,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
         {image && (
           <Button
             variant="outline"
-            className="bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer"
+            className="bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer text-xs sm:text-sm py-1 px-2"
             type="button"
             onClick={onImageDelete}
           >

@@ -11,9 +11,12 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 function Header() {
   const { userId } = useAuth();
+
+  const pathname = usePathname();
 
   return (
     <div className="flex items-center justify-between p-2 max-w-6xl mx-auto">
@@ -39,7 +42,12 @@ function Header() {
       </div>
 
       <div className="flex items-center space-x-4 px-6">
-        <Link href="/" className="icon">
+        <Link
+          href="/"
+          className={`icon ${
+            pathname === "/" ? "!text-black border-b-[2px] pb-1" : ""
+          }`}
+        >
           <HomeIcon className="h-5 " />
           <p>Home</p>
         </Link>
@@ -49,12 +57,19 @@ function Header() {
           <p>Network</p>
         </Link>
 
-        <Link href={`/user/${userId}`} className="icon hidden md:flex">
+        <Link
+          href={`/user/${userId}`}
+          className={`icon ${
+            pathname.startsWith("/user")
+              ? "!text-black border-b-[2px] pb-1"
+              : ""
+          }`}
+        >
           <User className="h-5" />
           <p>User</p>
         </Link>
 
-        <Link href="" className="icon">
+        <Link href="" className="icon icon hidden md:flex">
           <MessagesSquare className="h-5" />
           <p>Messaging</p>
         </Link>

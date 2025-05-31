@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export function getTimeAgo(dateInput: Date | string): string {
   const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
   const now = new Date();
-  const diff = Math.floor((now.getTime() - date.getTime()) / 1000); // in seconds
+  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   if (diff < 60) return "just now";
 
