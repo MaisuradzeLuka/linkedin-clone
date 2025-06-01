@@ -11,7 +11,19 @@
   }
 
   .icon p {
-    @apply text-xs;
+    @apply text-gray-600 text-xs;
+  }
+
+  .iconActive {
+    @apply flex flex-col items-center justify-center text-sm font-light;
+  }
+
+  .iconActive svg {
+    @apply fill-white stroke-black;
+  }
+
+  .iconActive p {
+    @apply text-black text-sm;
   }
 
   .postButton {

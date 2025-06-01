@@ -4,6 +4,7 @@ import { FetchedPostType, SafeUser } from "@/types";
 import { getTimeAgo } from "@/lib/utils";
 import PostFeatures from "./PostFeatures";
 import Link from "next/link";
+import DeletePost from "./DeletePost";
 
 const PostFeed = async ({
   posts,
@@ -33,8 +34,12 @@ const PostFeed = async ({
           posts?.map((post) => (
             <article
               key={post._id}
-              className="p-4 border-b bg-white rounded-md border-gray-200"
+              className="relative p-4 border-b bg-white rounded-md border-gray-200 group"
             >
+              {post.user.userId === user.userId && (
+                <DeletePost postId={post._id} />
+              )}
+
               <div className="flex items-start gap-2">
                 <Link href={`/user/${post.user.userId}`}>
                   <Image

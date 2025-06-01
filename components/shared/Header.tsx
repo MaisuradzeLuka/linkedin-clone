@@ -19,7 +19,7 @@ function Header() {
   const pathname = usePathname();
 
   return (
-    <div className="flex items-center justify-between p-2 max-w-6xl mx-auto">
+    <div className="flex items-center justify-between p-2 max-w-6xl mx-auto z-99">
       <Link href="/">
         <Image
           className="rounded-lg"
@@ -41,35 +41,37 @@ function Header() {
         </form>
       </div>
 
-      <div className="flex items-center space-x-4 px-6">
+      <div className="flex items-center px-6">
         <Link
           href="/"
-          className={`icon ${
-            pathname === "/" ? "!text-black border-b-[2px] pb-1" : ""
+          className={`px-2 w-max ${
+            pathname === "/"
+              ? "iconActive !text-black border-b-[2px] pb-1"
+              : "icon"
           }`}
         >
           <HomeIcon className="h-5 " />
           <p>Home</p>
         </Link>
 
-        <Link href="" className="icon hidden md:flex">
+        <Link href="" className="icon px-2 w-max hidden md:flex">
           <UsersIcon className="h-5" />
           <p>Network</p>
         </Link>
 
         <Link
           href={`/user/${userId}`}
-          className={`icon ${
+          className={`px-2 w-max ${
             pathname.startsWith("/user")
-              ? "!text-black border-b-[2px] pb-1"
-              : ""
+              ? "iconActive !text-black border-b-[2px] pb-1"
+              : "icon"
           }`}
         >
-          <User className="h-5" />
+          <User className="h-5 " />
           <p>User</p>
         </Link>
 
-        <Link href="" className="icon icon hidden md:flex">
+        <Link href="" className="icon icon px-2 w-max hidden md:flex">
           <MessagesSquare className="h-5" />
           <p>Messaging</p>
         </Link>

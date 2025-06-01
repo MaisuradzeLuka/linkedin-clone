@@ -25,9 +25,13 @@ const page = async () => {
         <PostFeed posts={posts} user={existingUser} />
       </section>
 
-      <section className="hidden lg:inline col-span-2">
-        <MostPopularPost posts={posts} />
-      </section>
+      {posts.length ? (
+        <section className="hidden lg:inline col-span-2">
+          <MostPopularPost posts={posts} />
+        </section>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

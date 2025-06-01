@@ -33,36 +33,39 @@ const PostFeatures = ({
   const [likes, setLikes] = useState<string[]>(defaultLikes);
   const [showForm, setShowForm] = useState(false);
   const [fullUrl, setFullUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const currentUrl = window.location.href;
-      setFullUrl(`${currentUrl}${postId}`);
-    }
-  }, [postId]);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const currentUrl = window.location.href;
+  //     setFullUrl(`${currentUrl}${postId}`);
+  //   }
+  // }, [postId]);
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(fullUrl);
       toast.success("URL copied", {
-        className: " !text-green-500",
+        className: "!text-green-500",
         duration: 3000,
       });
       setIsOpen(false);
     } catch (err) {
       toast.error("Couldn't copy URL", {
-        className: " !text-red-500",
+        className: "!text-red-500",
         duration: 3000,
       });
     }
   };
 
   const handleLike = async () => {
+    setIsLoading(true);
     const type = likes.includes(user.userId) ? "unlike" : "like";
 
     const res = await likeUnlikePost(postId, type, user.userId);
 
     setLikes(res);
+    setIsLoading(false);
   };
 
   const handleRepost = () => {
@@ -75,6 +78,7 @@ const PostFeatures = ({
         <button
           className="flex items-center gap-1 cursor-pointer text-sm md:text-md hover:bg-gray-200 px-2 py-1 rounded-md transition"
           onClick={handleLike}
+          disabled={isLoading}
         >
           <ThumbsUp
             className={`w-4 h-4 sm:w-6 sm:h-6  ${
@@ -95,7 +99,7 @@ const PostFeatures = ({
           <Repeat className="w-4 h-4 sm:w-6 sm:h-6" /> Repost
         </button>
 
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        {/* <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md">
             <Send className="w-4 h-4 sm:w-6 sm:h-6" /> Send
           </DialogTrigger>
@@ -116,7 +120,7 @@ const PostFeatures = ({
               Copy
             </Button>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </div>
 
       {showForm && (

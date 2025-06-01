@@ -15,6 +15,8 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
   const [imageError, setImageError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  let imageFile = "";
+
   const onImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
 
@@ -25,12 +27,14 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
       return;
     } else {
       setImage(image.body);
+      imageFile = image.body;
       if (imageError) setImageError("");
     }
   };
 
   const onImageDelete = () => {
     setImage("");
+    imageFile = "";
 
     if (imageError) {
       setImageError("");
@@ -48,6 +52,10 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
     } else if (postValueLength > 1500) {
       setPostValueError("Post must less than 1500 characters long");
       return;
+    } else {
+      if (postValueError) {
+        setPostValueError("");
+      }
     }
 
     if (imageError || postValueError) return;
@@ -124,7 +132,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
         {(image || postValue) && (
           <Button
             variant="outline"
-            className="absolute left-0 bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer text-xs sm:text-sm px-2 "
+            className="absolute left-0 bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer text-xs sm:text-sm px-2 sm:px-4"
             type="submit"
             disabled={isLoading}
           >
@@ -139,6 +147,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
             accept="image/*"
             name="image"
             id="image"
+            value={imageFile}
             onChange={(e) => onImageChange(e)}
             hidden
           />

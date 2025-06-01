@@ -3,7 +3,6 @@
 import connectToDb from "@/mongodb";
 import { Post } from "@/mongodb/schemas/Post";
 import { CommentType, FetchedPostType } from "@/types";
-import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 import { registerModels } from "../models";
 
@@ -41,6 +40,24 @@ export const getPosts = async () => {
   }
 };
 
+export const deletePost = async (postId: string) => {
+  await connectToDb();
+
+  try {
+    const deletedPost = await Post.findByIdAndDelete(postId);
+
+    revalidatePath("/");
+
+    if (deletedPost) {
+      return "SUCCESS";
+    } else {
+      return "ERROR";
+    }
+  } catch (error: any) {
+    throw new Error(`Error while deleting post: ${error.message}`);
+  }
+};
+
 export const createPost = async (
   postValue: string,
   user: string,
@@ -51,20 +68,13 @@ export const createPost = async (
     user: user,
     postImage: image,
   };
+  await connectToDb();
 
   try {
-    await connectToDb();
-
     const newPost = await Post.create(postBody);
 
-    const plainPost = {
-      ...newPost.toObject(),
-      _id: newPost._id.toString(),
-      createdAt: newPost.createdAt?.toString(),
-    };
-
     revalidatePath("/");
-    return plainPost;
+    return "SUCCESS";
   } catch (error: any) {
     throw new Error(`Error while creating post: ${error.message}`);
   }
@@ -95,8 +105,6 @@ export const likeUnlikePost = async (
 
       return updatedPost.likes;
     }
-
-    revalidatePath("/");
   } catch (error: any) {
     throw new Error(`Error while liking/unliking post: ${error.message}`);
   }
