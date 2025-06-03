@@ -10,7 +10,7 @@ import { MessageCircle, Repeat, Send, ThumbsUp } from "lucide-react";
 import { DialogHeader } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { likeUnlikePost } from "@/actions/posts";
 import { CommentType, SafeUser } from "@/types";
@@ -35,12 +35,12 @@ const PostFeatures = ({
   const [fullUrl, setFullUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     const currentUrl = window.location.href;
-  //     setFullUrl(`${currentUrl}${postId}`);
-  //   }
-  // }, [postId]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const currentUrl = window.location.href;
+      setFullUrl(`${currentUrl}${postId}`);
+    }
+  }, [postId]);
 
   const handleCopy = async () => {
     try {
@@ -73,60 +73,70 @@ const PostFeatures = ({
   };
 
   return (
-    <div className="w-full flex flex-col items mt-4">
-      <div className="w-full sm:w-4/5 self-center flex justify-between items-center">
-        <button
-          className="flex items-center gap-1 cursor-pointer text-sm md:text-md hover:bg-gray-200 px-2 py-1 rounded-md transition"
-          onClick={handleLike}
-          disabled={isLoading}
-        >
-          <ThumbsUp
-            className={`w-4 h-4 sm:w-6 sm:h-6  ${
-              likes.includes(user.userId) ? "text-blue-500" : ""
-            }`}
-          />{" "}
-          Like
-        </button>
-
-        <button
-          onClick={() => setShowForm((prev) => !prev)}
-          className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md transition"
-        >
-          <MessageCircle className="w-4 h-4 sm:w-6 sm:h-6" /> Comment
-        </button>
-
-        <button className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md transition">
-          <Repeat className="w-4 h-4 sm:w-6 sm:h-6" /> Repost
-        </button>
-
-        {/* <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md">
-            <Send className="w-4 h-4 sm:w-6 sm:h-6" /> Send
-          </DialogTrigger>
-
-          <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md shadow-lg">
-            <DialogHeader>
-              <DialogTitle className="sr-only">Post share link</DialogTitle>
-            </DialogHeader>
-
-            <p className="bg-gray-300 px-3 py-2 rounded-md max-w-[200px] sm:max-w-max overflow-hidden">
-              {fullUrl}
-            </p>
-            <Button
-              variant="outline"
-              className="cursor-pointer"
-              onClick={handleCopy}
-            >
-              Copy
-            </Button>
-          </DialogContent>
-        </Dialog> */}
+    <>
+      <div className="flex justify-between items-center mt-3">
+        <p className="text-gray-600 text-sm">{likes?.length || 0} Likes</p>
+        <p className="text-gray-600 text-sm">
+          {comments?.length || 0} Comments
+        </p>
       </div>
 
-      {showForm && (
-        <CreateComment postId={postId} user={user} comments={comments} />
-      )}
-    </div>
+      <div className="w-full h-[1px] bg-gray-300 mt-2" />
+      <div className="w-full flex flex-col items mt-4">
+        <div className="w-full sm:w-4/5 self-center flex justify-between items-center">
+          <button
+            className="flex items-center gap-1 cursor-pointer text-sm md:text-md hover:bg-gray-200 px-2 py-1 rounded-md transition"
+            onClick={handleLike}
+            disabled={isLoading}
+          >
+            <ThumbsUp
+              className={`w-4 h-4 sm:w-6 sm:h-6  ${
+                likes.includes(user.userId) ? "text-blue-500" : ""
+              }`}
+            />{" "}
+            Like
+          </button>
+
+          <button
+            onClick={() => setShowForm((prev) => !prev)}
+            className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md transition"
+          >
+            <MessageCircle className="w-4 h-4 sm:w-6 sm:h-6" /> Comment
+          </button>
+
+          <button className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md transition">
+            <Repeat className="w-4 h-4 sm:w-6 sm:h-6" /> Repost
+          </button>
+
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger className="flex items-center gap-1 cursor-pointer text-sm hover:bg-gray-200 px-2 py-1 rounded-md">
+              <Send className="w-4 h-4 sm:w-6 sm:h-6" /> Send
+            </DialogTrigger>
+
+            <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md shadow-lg">
+              <DialogHeader>
+                <DialogTitle className="sr-only">Post share link</DialogTitle>
+              </DialogHeader>
+
+              <p className="bg-gray-300 px-3 py-2 rounded-md max-w-[200px] sm:max-w-max overflow-hidden">
+                {fullUrl}
+              </p>
+              <Button
+                variant="outline"
+                className="cursor-pointer"
+                onClick={handleCopy}
+              >
+                Copy
+              </Button>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        {showForm && (
+          <CreateComment postId={postId} user={user} comments={comments} />
+        )}
+      </div>
+    </>
   );
 };
 

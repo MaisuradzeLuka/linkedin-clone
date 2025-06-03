@@ -3,8 +3,10 @@ import { createOrGetUser } from "@/actions/user";
 import MostPopularPost from "@/components/shared/MostPopularPost";
 import PostFeed from "@/components/shared/PostFeed";
 import UserInfo from "@/components/shared/UserInfo";
+import Post from "@/components/Skeletons/Post";
 import { FetchedPostType } from "@/types";
 import { auth } from "@clerk/nextjs/server";
+import { Suspense } from "react";
 
 const page = async () => {
   const user = await auth();
@@ -22,7 +24,13 @@ const page = async () => {
       </section>
 
       <section className="col-span-8 md:col-span-6 lg:col-span-4">
-        <PostFeed posts={posts} user={existingUser} />
+        <Suspense
+          fallback={[1, 2].map((skeleton) => (
+            <Post key={skeleton} />
+          ))}
+        >
+          <PostFeed posts={posts} user={existingUser} />
+        </Suspense>
       </section>
 
       {posts.length ? (

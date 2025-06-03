@@ -8,12 +8,14 @@ import { registerModels } from "../models";
 
 registerModels();
 
-export const getPosts = async () => {
+export const getPosts = async (skip = 0) => {
   await connectToDb();
 
   try {
     const posts = await Post.find()
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(10)
       .populate([
         {
           path: "user",

@@ -5,6 +5,7 @@ import { getTimeAgo } from "@/lib/utils";
 import PostFeatures from "./PostFeatures";
 import Link from "next/link";
 import DeletePost from "./DeletePost";
+import LoadMorePosts from "./LoadMorePosts";
 
 const PostFeed = async ({
   posts,
@@ -76,17 +77,6 @@ const PostFeed = async ({
                 />
               )}
 
-              <div className="flex justify-between items-center mt-3">
-                <p className="text-gray-600 text-sm">
-                  {post?.likes?.length || 0} Likes{" "}
-                </p>
-                <p className="text-gray-600 text-sm">
-                  {post?.comments?.length || 0} Comments{" "}
-                </p>
-              </div>
-
-              <div className="w-full h-[1px] bg-gray-300 mt-2" />
-
               <PostFeatures
                 postId={post._id}
                 comments={post.comments}
@@ -100,6 +90,8 @@ const PostFeed = async ({
             There are no posts to display
           </p>
         )}
+
+        <LoadMorePosts />
       </section>
     </div>
   );

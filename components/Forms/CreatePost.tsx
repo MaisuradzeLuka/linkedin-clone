@@ -10,12 +10,29 @@ import { imageToBase64 } from "@/lib/utils";
 
 const CreatePost = ({ user }: { user: SafeUser }) => {
   const [postValue, setPostValue] = useState("");
+  const [isTouched, setIsTouched] = useState(false);
   const [image, setImage] = useState("");
   const [postValueError, setPostValueError] = useState("");
   const [imageError, setImageError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   let imageFile = "";
+
+  const onPostValueChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const text = e.currentTarget.value;
+
+    if (isTouched && text.length < 2) {
+      setPostValueError("Post must be at least 2 characters long");
+    } else if (isTouched && text.length > 1500) {
+      setPostValueError("Post must less than 1500 characters long");
+    } else if (postValueError) {
+      setPostValueError("");
+    }
+
+    setIsTouched(true);
+    setPostValue(text);
+    sessionStorage.setItem("Post", text);
+  };
 
   const onImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
@@ -52,10 +69,6 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
     } else if (postValueLength > 1500) {
       setPostValueError("Post must less than 1500 characters long");
       return;
-    } else {
-      if (postValueError) {
-        setPostValueError("");
-      }
     }
 
     if (imageError || postValueError) return;
@@ -107,7 +120,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
             className="outline-none border rounded-full border-gray-400 text-gray-700 px-4 w-full h-10"
             placeholder="Start writing a post..."
             value={postValue}
-            onChange={(e) => setPostValue(e.currentTarget.value)}
+            onChange={(e) => onPostValueChange(e)}
           />
 
           {postValueError && (
