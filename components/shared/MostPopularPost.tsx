@@ -13,7 +13,7 @@ const MostPopularPost = ({ posts }: { posts: FetchedPostType[] }) => {
   return (
     <article
       key={post._id}
-      className="p-4 border-b bg-white rounded-md border-gray-200"
+      className="p-4 border-[1px] bg-white rounded-xl border-[#d1d1ce]"
     >
       <div className="flex items-start gap-2">
         <Image

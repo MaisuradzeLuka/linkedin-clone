@@ -3,17 +3,28 @@ import "./globals.css";
 import Header from "@/components/shared/Header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
+import { auth } from "@clerk/nextjs/server";
+import { createOrGetUser } from "@/actions/user";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Linkedin",
   description: "Connect with using linkin-clone",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { userId } = await auth();
+
+  const user = await createOrGetUser({ get: { userId: userId || "" } });
+
+  if (!user) {
+    return redirect("/onboarding");
+  }
+
   return (
     <ClerkProvider>
       <html lang="en">

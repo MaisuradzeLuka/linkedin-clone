@@ -6,8 +6,8 @@ const loading = () => {
   return (
     <div className="grid grid-cols-8 gap-2 mt-6">
       <section className="hidden md:inline col-span-2">
-        <div className="relative bg-white rounded-lg ">
-          <Skeleton className="w-full h-20 object-cover rounded-t-lg z-10 bg-gray-300" />
+        <div className="relative bg-white rounded-xl ">
+          <Skeleton className="w-full h-20 object-cover rounded-t-xl z-10 bg-gray-300" />
 
           <Skeleton className="absolute !rounded-full h-20 w-20 ml-4 -mt-10 border-2 border-white z-50 object-cover bg-gray-300" />
 
@@ -20,7 +20,7 @@ const loading = () => {
       </section>
 
       <section className="col-span-8 md:col-span-6 lg:col-span-4">
-        <div className="flex flex-col items-end p-4 border-b bg-white rounded-md border-gray-200 mb-6">
+        <div className="flex flex-col items-end p-4 border-b bg-white rounded-xl border-gray-200 mb-6">
           <Skeleton className="w-full h-10 bg-gray-300" />
           <Skeleton className="w-[100px] h-8 bg-gray-300 mt-4" />
         </div>

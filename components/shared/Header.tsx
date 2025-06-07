@@ -1,17 +1,11 @@
 "use client";
 
 import { SignedIn, SignedOut, SignOutButton, useAuth } from "@clerk/nextjs";
-import {
-  Briefcase,
-  HomeIcon,
-  MessagesSquare,
-  SearchIcon,
-  User,
-  UsersIcon,
-} from "lucide-react";
+import { HomeIcon, MessagesSquare, User, UsersIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SearchInput from "../Forms/SearchInput";
 
 function Header() {
   const { userId } = useAuth();
@@ -30,15 +24,8 @@ function Header() {
         />
       </Link>
 
-      <div className="hidden sm:inline flex-1">
-        <form className="flex items-center space-x-1 bg-gray-100 p-2 rounded-md flex-1 mx-2 max-w-96">
-          <SearchIcon className="h-4 text-gray-600" />
-          <input
-            type="text"
-            placeholder="Search"
-            className="bg-transparent flex-1 outline-none"
-          />
-        </form>
+      <div className=" flex-1">
+        <SearchInput />
       </div>
 
       <div className="flex items-center px-6">

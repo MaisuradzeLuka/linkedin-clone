@@ -3,7 +3,7 @@ import { Skeleton } from "../ui/skeleton";
 
 const Post = () => {
   return (
-    <div className="p-4 border-b bg-white rounded-md border-gray-200 mb-6">
+    <div className="p-4 border-b bg-white rounded-xl border-gray-200 mb-6">
       <div className="flex items-start gap-2 mb-4">
         <Skeleton className="rounded-full w-12 h-12 bg-gray-300" />
 

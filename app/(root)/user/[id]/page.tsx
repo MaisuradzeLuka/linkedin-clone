@@ -71,6 +71,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           showCreatePost={isAuthenticated}
           posts={filteredPosts}
           user={existingUser}
+          isAuthenticated={isAuthenticated}
         />
       </section>
     </div>

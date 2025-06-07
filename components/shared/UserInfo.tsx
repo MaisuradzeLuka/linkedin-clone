@@ -23,13 +23,13 @@ const UserInfo = async ({
   }, 0);
 
   return (
-    <div className="relative bg-white rounded-lg ">
+    <div className="relative bg-white rounded-xl border-[1px] border-[#d1d1ce] ">
       <Image
         src={user?.backgroundImg!}
         width={80}
         height={80}
         alt="user avatar"
-        className="w-full h-20 object-cover rounded-t-lg z-10"
+        className="w-full h-20 object-cover rounded-t-xl z-10"
       />
 
       <Image

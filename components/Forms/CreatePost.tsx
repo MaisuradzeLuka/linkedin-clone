@@ -11,12 +11,18 @@ import { imageToBase64 } from "@/lib/utils";
 const CreatePost = ({ user }: { user: SafeUser }) => {
   const [postValue, setPostValue] = useState("");
   const [isTouched, setIsTouched] = useState(false);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<{
+    string: string;
+    blob: File | undefined;
+  }>({
+    string: "",
+    blob: undefined,
+  });
   const [postValueError, setPostValueError] = useState("");
   const [imageError, setImageError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  let imageFile = "";
+  let imageFile;
 
   const onPostValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     const text = e.currentTarget.value;
@@ -37,21 +43,23 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
   const onImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
 
+    if (!file) return;
+
     const image = await imageToBase64(file);
 
     if (image.status === "ERROR") {
       setImageError(image.body);
       return;
     } else {
-      setImage(image.body);
-      imageFile = image.body;
+      setImage({ string: image.body, blob: file });
+      imageFile = file;
       if (imageError) setImageError("");
     }
   };
 
   const onImageDelete = () => {
-    setImage("");
-    imageFile = "";
+    setImage({ string: "", blob: undefined });
+    imageFile = null;
 
     if (imageError) {
       setImageError("");
@@ -74,7 +82,8 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
     if (imageError || postValueError) return;
 
     setIsLoading(true);
-    const newPost = await createPost(postValue, user._id, image);
+
+    const newPost = await createPost(postValue, user._id, image.blob);
 
     if (newPost) {
       toast.success("Post created!", {
@@ -84,7 +93,8 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
       });
 
       setPostValue("");
-      setImage("");
+      setImage({ string: "", blob: undefined });
+      imageFile = null;
       setPostValueError("");
       setImageError("");
     } else {
@@ -101,7 +111,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
   return (
     <form
       onSubmit={(e) => onSubmit(e)}
-      className="bg-white rounded-md px-6 py-4"
+      className="bg-white rounded-xl px-6 py-4 border-[1px] border-[#d1d1ce]"
     >
       <div className="flex items-center gap-4">
         <Image
@@ -129,9 +139,9 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
         </div>
       </div>
 
-      {image && (
+      {image.string && (
         <img
-          src={image}
+          src={image.string}
           alt="prewiev"
           className="w-full aspect-video object-cover mt-6 mb-2"
         />
@@ -142,7 +152,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
       )}
 
       <div className="relative flex justify-end gap-2 mt-6">
-        {(image || postValue) && (
+        {(image.string || postValue) && (
           <Button
             variant="outline"
             className="absolute left-0 bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer text-xs sm:text-sm px-2 sm:px-4"
@@ -154,7 +164,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
         )}
 
         <label className="flex items-center justify-center bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition border !border-gray-500 py-1 px-2 sm:py-2 sm:px-4 rounded-md font-semibold text-xs sm:text-sm  cursor-pointer">
-          {image ? "Change image" : "Add image"}
+          {image.string ? "Change image" : "Add image"}
           <input
             type="file"
             accept="image/*"
@@ -166,7 +176,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
           />
         </label>
 
-        {image && (
+        {image.string && (
           <Button
             variant="outline"
             className="bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer text-xs sm:text-sm py-1 px-2"

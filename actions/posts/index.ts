@@ -3,8 +3,15 @@
 import connectToDb from "@/mongodb";
 import { Post } from "@/mongodb/schemas/Post";
 import { CommentType, FetchedPostType } from "@/types";
+import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { registerModels } from "../models";
+import {
+  blobServiceClient,
+  containerName,
+  generateBlobSASUrl,
+  generateWriteSASToken,
+} from "@/lib/generateSASToken";
 
 registerModels();
 
@@ -17,9 +24,7 @@ export const getPosts = async (skip = 0) => {
       .skip(skip)
       .limit(10)
       .populate([
-        {
-          path: "user",
-        },
+        { path: "user" },
         {
           path: "comments",
           options: { sort: { createdAt: -1 } },
@@ -28,20 +33,26 @@ export const getPosts = async (skip = 0) => {
       ])
       .lean<FetchedPostType[]>();
 
-    return posts.map((post) => ({
-      ...post,
-      _id: post._id.toString(),
-      comments: post.comments?.map((comment: CommentType) => ({
-        ...comment,
-        user: { ...comment.user, _id: comment.user._id.toString() },
-        _id: comment._id.toString(),
-      })),
-    }));
+    const postsWithSignedUrls = await Promise.all(
+      posts.map(async (post) => ({
+        ...post,
+        _id: post._id.toString(),
+        postImage: post.postImage
+          ? await generateBlobSASUrl(post.postImage)
+          : undefined,
+        comments: post.comments?.map((comment: CommentType) => ({
+          ...comment,
+          _id: comment._id.toString(),
+          user: { ...comment.user, _id: comment.user._id.toString() },
+        })),
+      }))
+    );
+
+    return postsWithSignedUrls;
   } catch (error: any) {
     throw new Error(`Failed while getting posts: ${error.message}`);
   }
 };
-
 export const deletePost = async (postId: string) => {
   await connectToDb();
 
@@ -63,17 +74,41 @@ export const deletePost = async (postId: string) => {
 export const createPost = async (
   postValue: string,
   user: string,
-  image?: string
+  image?: File
 ) => {
   const postBody = {
     text: postValue,
     user: user,
-    postImage: image,
+    postImage: "",
   };
-  await connectToDb();
+
+  if (image) {
+    try {
+      const sasToken = await generateWriteSASToken();
+      const containerClient =
+        blobServiceClient.getContainerClient(containerName);
+      const blobName = `${randomUUID()}?${sasToken}`;
+      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+      const arrayBuffer = await image.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      await blockBlobClient.uploadData(buffer, {
+        blobHTTPHeaders: {
+          blobContentType: image.type,
+        },
+      });
+
+      postBody.postImage = blobName;
+    } catch (error: any) {
+      throw new Error(`Coulnt upload image to azure: ${error.message}`);
+    }
+  }
 
   try {
-    const newPost = await Post.create(postBody);
+    await connectToDb();
+
+    await Post.create(postBody);
 
     revalidatePath("/");
     return "SUCCESS";

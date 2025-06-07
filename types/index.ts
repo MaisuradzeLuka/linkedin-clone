@@ -1,7 +1,7 @@
 export type PostType = {
   text: string;
   user: SafeUser;
-  postImage?: String;
+  postImage?: string;
   likes?: string[];
 };
 

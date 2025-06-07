@@ -11,10 +11,12 @@ const PostFeed = async ({
   posts,
   user,
   showCreatePost = true,
+  isAuthenticated,
 }: {
   posts: FetchedPostType[];
   user: SafeUser;
   showCreatePost?: boolean;
+  isAuthenticated?: boolean;
 }) => {
   const clientUser = {
     firstname: user.firstname ?? "",
@@ -35,11 +37,9 @@ const PostFeed = async ({
           posts?.map((post) => (
             <article
               key={post._id}
-              className="relative p-4 border-b bg-white rounded-md border-gray-200 group"
+              className="relative p-4 border-b bg-white rounded-xl group border-[1px] border-[#d1d1ce]"
             >
-              {post.user.userId === user.userId && (
-                <DeletePost postId={post._id} />
-              )}
+              {isAuthenticated && <DeletePost postId={post._id} />}
 
               <div className="flex items-start gap-2">
                 <Link href={`/user/${post.user.userId}`}>
