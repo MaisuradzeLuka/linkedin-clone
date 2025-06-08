@@ -15,10 +15,9 @@ const SearchInput = () => {
   };
 
   return (
-
     <form
       onSubmit={handleSubmit}
-      className="flex items-center space-x-1 bg-gray-100 p-2 rounded-md flex-1 mx-2 max-w-96"
+      className="flex items-center space-x-1 bg-gray-100 p-[6px] rounded-md flex-1 mx-2 max-w-96"
     >
       <button type="submit" className="cursor-pointer">
         <SearchIcon className="h-4 text-gray-600" />

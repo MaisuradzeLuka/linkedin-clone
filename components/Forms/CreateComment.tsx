@@ -89,7 +89,7 @@ const CreateComment = ({
           <textarea
             ref={textareaRef}
             placeholder="Add a comment..."
-            className="w-full outline-none px-2 resize-none overflow-hidden bg-transparent"
+            className="w-full text-sm md:md max-h-30 outline-none px-2 resize-none overflow-hidden overflow-y-scroll bg-transparent"
             value={commentValue}
             onChange={(e) => setCommentValue(e.target.value)}
             rows={1}
@@ -122,7 +122,7 @@ const CreateComment = ({
                   className="rounded-full self-start"
                 />
 
-                <div className=" leading-tight">
+                <div className="w-full leading-tight">
                   <h4 className="font-medium">
                     {comment.user.firstname} {comment.user.lastname}
                   </h4>
@@ -131,7 +131,7 @@ const CreateComment = ({
                     {getTimeAgo(comment.createdAt)}
                   </span>
 
-                  <p className="w-full mt-4">{comment.comment}</p>
+                  <p className="break-all mt-4">{comment.comment}</p>
                 </div>
               </div>
             ))}

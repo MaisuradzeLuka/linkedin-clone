@@ -28,9 +28,9 @@ export default async function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className="flex flex-col antialiased  h-screen bg-[#F4F2EE] ">
+        <body className="h-screen flex flex-col antialiased bg-[#F4F2EE] ">
           <header className="border-b border-gray-300 sticky top-0 bg-white z-50">
-            <Header />
+            <Header userId={userId} user={user} />
           </header>
 
           <main className="flex-1 w-full max-w-6xl mx-auto px-4 lg:px-0">

@@ -28,7 +28,7 @@ const UserInfo = async ({
         src={user?.backgroundImg!}
         width={80}
         height={80}
-        alt="user avatar"
+        alt="user background"
         className="w-full h-20 object-cover rounded-t-xl z-10"
       />
 
