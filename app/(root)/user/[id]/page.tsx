@@ -34,7 +34,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
         <div className="w-[95%] mx-auto flex items-end justify-between">
           <Image
-            src={existingUser.avatar}
+            src={existingUser.avatar || "/assets/default-avatar.jpg"}
             width={95}
             height={95}
             alt="user profile"

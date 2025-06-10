@@ -8,10 +8,10 @@ import { revalidatePath } from "next/cache";
 import { registerModels } from "../models";
 import {
   blobServiceClient,
-  containerName,
   generateBlobSASUrl,
   generateWriteSASToken,
 } from "@/lib/generateSASToken";
+import { generateImgUrl } from "../user";
 
 registerModels();
 
@@ -34,18 +34,45 @@ export const getPosts = async (skip = 0) => {
       .lean<FetchedPostType[]>();
 
     const postsWithSignedUrls = await Promise.all(
-      posts.map(async (post) => ({
-        ...post,
-        _id: post._id.toString(),
-        postImage: post.postImage
-          ? await generateBlobSASUrl(post.postImage)
-          : undefined,
-        comments: post.comments?.map((comment: CommentType) => ({
-          ...comment,
-          _id: comment._id.toString(),
-          user: { ...comment.user, _id: comment.user._id.toString() },
-        })),
-      }))
+      posts.map(async (post) => {
+        const signedPostImage = post.postImage
+          ? await generateBlobSASUrl(post.postImage, "posts")
+          : undefined;
+
+        const userAvatar = await generateImgUrl(
+          post.user.avatar as unknown as { img: string; edited: boolean },
+          "users"
+        );
+
+        const commentsWithAvatars = await Promise.all(
+          (post.comments ?? []).map(async (comment: CommentType) => ({
+            ...comment,
+            _id: comment._id.toString(),
+            user: {
+              ...comment.user,
+              _id: comment.user._id.toString(),
+              avatar: await generateImgUrl(
+                comment.user.avatar as unknown as {
+                  img: string;
+                  edited: boolean;
+                },
+                "users"
+              ),
+            },
+          }))
+        );
+
+        return {
+          ...post,
+          _id: post._id.toString(),
+          user: {
+            ...post.user,
+            avatar: userAvatar,
+          },
+          postImage: signedPostImage,
+          comments: commentsWithAvatars,
+        };
+      })
     );
 
     return postsWithSignedUrls;
@@ -53,6 +80,7 @@ export const getPosts = async (skip = 0) => {
     throw new Error(`Failed while getting posts: ${error.message}`);
   }
 };
+
 export const deletePost = async (postId: string) => {
   await connectToDb();
 
@@ -84,9 +112,8 @@ export const createPost = async (
 
   if (image) {
     try {
-      const sasToken = await generateWriteSASToken();
-      const containerClient =
-        blobServiceClient.getContainerClient(containerName);
+      const sasToken = await generateWriteSASToken("posts");
+      const containerClient = blobServiceClient.getContainerClient("posts");
       const blobName = `${randomUUID()}?${sasToken}`;
       const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 

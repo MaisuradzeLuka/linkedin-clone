@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { imageToBase64 } from "@/lib/utils";
 import { editUserValidation } from "@/lib/validation";
 import { SafeUser } from "@/types";
 import { useAuth } from "@clerk/nextjs";
@@ -34,13 +33,13 @@ const page = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof editUserValidation>>({
-    resolver: zodResolver(editUserValidation),
+    // resolver: zodResolver(editUserValidation),
     defaultValues: {
       firstname: "",
       lastname: "",
       bio: "",
-      avatar: "",
-      backgroundImg: "",
+      avatar: { string: "", blob: undefined },
+      backgroundImg: { string: "", blob: undefined },
     },
   });
 
@@ -56,8 +55,8 @@ const page = () => {
         firstname: user.firstname!,
         lastname: user.lastname!,
         bio: user.bio || "",
-        avatar: user.avatar,
-        backgroundImg: user.backgroundImg,
+        avatar: { string: user.avatar, blob: undefined },
+        backgroundImg: { string: user.backgroundImg, blob: undefined },
       });
     };
 
@@ -66,9 +65,18 @@ const page = () => {
 
   const onSubmit = async (values: z.infer<typeof editUserValidation>) => {
     setIsLoading(true);
+
+    const updateValues = {
+      ...values,
+      avatar: values.avatar.blob || values.avatar.string,
+      backgroundImg: values.backgroundImg?.blob || values.backgroundImg?.string,
+    };
+
+    console.log(updateValues);
+
     const updatedUser = await createOrGetUser({
       update: {
-        ...values,
+        ...updateValues,
         username: existingUser?.username || "",
         userId: userId || "",
       },
@@ -95,7 +103,7 @@ const page = () => {
       >
         <AddImage
           defaultImage="/assets/1616872522462.jpg"
-          image={form.watch("backgroundImg")}
+          image={form.watch("backgroundImg")?.string}
           error={form.getFieldState("backgroundImg").error?.message}
           imageId="backgroundImg"
           setValue={form.setValue}
@@ -105,7 +113,7 @@ const page = () => {
 
         <AddImage
           defaultImage="/assets/default-avatar.jpg"
-          image={form.watch("avatar")}
+          image={form.watch("avatar").string}
           error={form.getFieldState("avatar").error?.message}
           imageId="avatar"
           setValue={form.setValue}

@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
     return config;
   },
 
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "2mb",
+    },
+  },
+
   typescript: {
     ignoreBuildErrors: true,
   },

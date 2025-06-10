@@ -78,7 +78,7 @@ const Onboarding = () => {
         </h2>
 
         <Image
-          src={user?.imageUrl || ""}
+          src={user?.imageUrl || "/assets/default-avatar.jpg"}
           alt="user avatar"
           width={48}
           height={48}

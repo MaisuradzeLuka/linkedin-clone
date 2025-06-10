@@ -13,22 +13,22 @@ type AddImageProps = {
   error?: string;
   defaultImage: string;
   setValue: UseFormSetValue<{
-    avatar: string;
+    avatar: { string: string; blob: File };
     firstname: string;
     lastname: string;
-    backgroundImg?: string | undefined;
+    backgroundImg?: { string: string; blob: File } | undefined;
     bio?: string | undefined;
   }>;
   setError: UseFormSetError<{
     firstname: string;
     lastname: string;
-    avatar: string;
+    avatar: { string: string; blob: File };
     backgroundImg: string;
     bio?: string | undefined;
   }>;
   clearErrors: UseFormClearErrors<{
-    avatar: string;
-    backgroundImg: string;
+    avatar: { string: string; blob: File };
+    backgroundImg: { string: string; blob: File } | undefined;
     firstname: string;
     lastname: string;
     bio?: string | undefined;
@@ -47,13 +47,18 @@ const AddImage = ({
   const handleBgImg = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
 
+    if (!file) {
+      setError(imageId, { message: "No file selected" });
+      return;
+    }
+
     const strImage = await imageToBase64(file);
 
     if (strImage.status === "ERROR") {
       setError(imageId, { message: strImage.body });
       return;
     } else {
-      setValue(imageId, strImage.body);
+      setValue(imageId, { string: strImage.body, blob: file });
       if (error) clearErrors(imageId);
     }
   };

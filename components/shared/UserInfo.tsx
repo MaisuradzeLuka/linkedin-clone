@@ -1,4 +1,3 @@
-import { User } from "@clerk/nextjs/server";
 import Image from "next/image";
 
 import { FetchedPostType, SafeUser } from "@/types";
@@ -16,6 +15,7 @@ const UserInfo = async ({
 
   const userCommentsLength = posts.reduce((count, post) => {
     const comments = post.comments ?? [];
+
     const userComments = comments.filter(
       (comment) => comment.user.userId === user?.userId
     );
@@ -24,10 +24,8 @@ const UserInfo = async ({
 
   return (
     <div className="relative bg-white rounded-xl border-[1px] border-[#d1d1ce] ">
-      <Image
+      <img
         src={user?.backgroundImg!}
-        width={80}
-        height={80}
         alt="user background"
         className="w-full h-20 object-cover rounded-t-xl z-10"
       />

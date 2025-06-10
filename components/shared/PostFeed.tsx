@@ -44,7 +44,7 @@ const PostFeed = async ({
               <div className="flex items-start gap-2">
                 <Link href={`/user/${post.user.userId}`}>
                   <Image
-                    src={post?.user.avatar}
+                    src={post?.user.avatar!}
                     width={48}
                     height={48}
                     alt="user avatar"
@@ -91,7 +91,7 @@ const PostFeed = async ({
           </p>
         )}
 
-        <LoadMorePosts />
+        {/* <LoadMorePosts /> */}
       </section>
     </div>
   );

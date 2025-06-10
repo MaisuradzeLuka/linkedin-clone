@@ -71,15 +71,13 @@ const CreateComment = ({
       className="flex-1 flex flex-col mt-4"
     >
       <div className="flex items-center gap-2">
-        <Link href={user.userId}>
-          <Image
-            src={user.avatar}
-            width={35}
-            height={35}
-            alt="user avatar"
-            className="rounded-full self-start"
-          />
-        </Link>
+        <Image
+          src={user.avatar!}
+          width={35}
+          height={35}
+          alt="user avatar"
+          className="rounded-full object-cover h-9 w-9 self-start"
+        />
 
         <div
           className={`flex-1 flex flex-col justify-center px-1 border-[2px]  border-gray-400 min-h-9 rounded-2xl outline-0 text-gray-600 ${
@@ -89,7 +87,7 @@ const CreateComment = ({
           <textarea
             ref={textareaRef}
             placeholder="Add a comment..."
-            className="w-full text-sm md:md max-h-30 outline-none px-2 resize-none overflow-hidden overflow-y-scroll bg-transparent"
+            className="w-full text-sm md:md max-h-30 outline-none px-2 resize-none overflow-y-auto bg-transparent"
             value={commentValue}
             onChange={(e) => setCommentValue(e.target.value)}
             rows={1}
@@ -114,13 +112,15 @@ const CreateComment = ({
           <div className="flex-1 flex flex-col gap-6">
             {comments.map((comment) => (
               <div className="flex items-start gap-4" key={comment._id}>
-                <Image
-                  src={comment.user.avatar}
-                  width={35}
-                  height={35}
-                  alt="user avatar"
-                  className="rounded-full self-start"
-                />
+                <Link href={`/user/${comment.user.userId}`}>
+                  <Image
+                    src={comment.user.avatar}
+                    width={35}
+                    height={35}
+                    alt="user avatar"
+                    className="rounded-full h-9 w-9 object-covr self-start"
+                  />
+                </Link>
 
                 <div className="w-full leading-tight">
                   <h4 className="font-medium">

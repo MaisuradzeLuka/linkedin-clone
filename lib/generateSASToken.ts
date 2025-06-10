@@ -5,8 +5,6 @@ import {
   generateBlobSASQueryParameters,
 } from "@azure/storage-blob";
 
-export const containerName = "posts";
-
 const accountName = process.env.AZURE_STORAGE_NAME;
 const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
 
@@ -23,7 +21,7 @@ export const blobServiceClient = new BlobServiceClient(
   sharedKeyCredentials
 );
 
-export async function generateWriteSASToken() {
+export async function generateWriteSASToken(containerName: string) {
   const containerClient = blobServiceClient.getContainerClient(containerName);
 
   const permissions = new BlobSASPermissions();
@@ -42,7 +40,10 @@ export async function generateWriteSASToken() {
   return sasToken;
 }
 
-export async function generateBlobSASUrl(blobName: string | null) {
+export async function generateBlobSASUrl(
+  blobName: string | null,
+  containerName: string
+) {
   if (!blobName) return;
 
   const containerClient = blobServiceClient.getContainerClient(containerName);
