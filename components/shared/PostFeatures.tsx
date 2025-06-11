@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@radix-ui/react-dialog";
-import { MessageCircle, Repeat, Send, ThumbsUp } from "lucide-react";
+import { Copy, MessageCircle, Repeat, Send, ThumbsUp } from "lucide-react";
 import { DialogHeader } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
@@ -113,7 +113,7 @@ const PostFeatures = ({
               <Send className="w-4 h-4 sm:w-6 sm:h-6" /> Send
             </DialogTrigger>
 
-            <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-md shadow-lg">
+            <DialogContent className="fixed z-99 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-2 md:px-4 py-3 bg-white border border-gray-300 rounded-md shadow-lg">
               <DialogHeader>
                 <DialogTitle className="sr-only">Post share link</DialogTitle>
               </DialogHeader>
@@ -126,7 +126,7 @@ const PostFeatures = ({
                 className="cursor-pointer"
                 onClick={handleCopy}
               >
-                Copy
+                <Copy />
               </Button>
             </DialogContent>
           </Dialog>

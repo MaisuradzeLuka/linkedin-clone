@@ -35,7 +35,7 @@ const UserInfo = async ({
         width={80}
         height={80}
         alt="user avatar"
-        className="absolute !rounded-full h-20 w-20 ml-4 -mt-10 border-2 border-white z-50 object-cover"
+        className="absolute !rounded-full h-20 w-20 ml-4 -mt-10 border-2 border-white z-30 object-cover"
       />
 
       <div className=" p-4 w-full flex flex-col items-center mt-4">

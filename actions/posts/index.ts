@@ -15,11 +15,17 @@ import { generateImgUrl } from "../user";
 
 registerModels();
 
-export const getPosts = async (skip = 0) => {
+export const getPosts = async (search = "", skip = 0, userId?: string) => {
   await connectToDb();
 
+  const query: any = {};
+
+  if (search.trim()) {
+    query.text = { $regex: search, $options: "i" };
+  }
+
   try {
-    const posts = await Post.find()
+    const posts = await Post.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(10)

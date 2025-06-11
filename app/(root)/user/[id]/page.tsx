@@ -7,15 +7,22 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const page = async ({ params }: { params: Promise<{ id: string }> }) => {
+const page = async ({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ search: string }>;
+}) => {
   const user = await auth();
   const { id } = await params;
+  const { search } = await searchParams;
 
   const existingUser: SafeUser = await createOrGetUser({
     get: { userId: id },
   });
 
-  const posts: FetchedPostType[] = await getPosts();
+  const posts: FetchedPostType[] = await getPosts(search, 0, id);
 
   const filteredPosts = posts.filter(
     (post) => post.user.userId === existingUser.userId

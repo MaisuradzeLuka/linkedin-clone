@@ -8,14 +8,20 @@ import { FetchedPostType } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import { Suspense } from "react";
 
-const page = async () => {
+const page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string }>;
+}) => {
+  const { search } = await searchParams;
+
   const user = await auth();
 
   const existingUser = await createOrGetUser({
     get: { userId: user.userId || "" },
   });
 
-  const posts: FetchedPostType[] = await getPosts();
+  const posts: FetchedPostType[] = await getPosts(search);
 
   return (
     <div className="grid grid-cols-8 gap-2 mt-6">

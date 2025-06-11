@@ -72,8 +72,6 @@ const page = () => {
       backgroundImg: values.backgroundImg?.blob || values.backgroundImg?.string,
     };
 
-    console.log(updateValues);
-
     const updatedUser = await createOrGetUser({
       update: {
         ...updateValues,
