@@ -55,7 +55,14 @@ function Header({ userId, user }: { userId: string | null; user: SafeUser }) {
             <p>Home</p>
           </Link>
 
-          <Link href="" className="icon px-2 w-max">
+          <Link
+            href="/network/following"
+            className={`px-2 w-max ${
+              pathname.startsWith("/network")
+                ? "iconActive !text-black border-b-[2px] pb-1"
+                : "icon"
+            }`}
+          >
             <UsersIcon className="h-5" />
             <p>Network</p>
           </Link>

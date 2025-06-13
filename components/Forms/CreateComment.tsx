@@ -14,7 +14,7 @@ const CreateComment = ({
 }: {
   postId: string;
   comments?: CommentType[];
-  user: SafeUser;
+  user: SafeUser | null;
 }) => {
   const [commentValue, setCommentValue] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,11 +33,11 @@ const CreateComment = ({
 
     const commentBody = {
       user: {
-        firstname: user.firstname,
-        lastname: user.firstname,
-        userId: user.userId,
-        avatar: user.avatar,
-        _id: user._id,
+        firstname: user?.firstname,
+        lastname: user?.firstname,
+        userId: user?.userId,
+        avatar: user?.avatar,
+        _id: user?._id,
       },
       comment: commentValue,
     };
@@ -72,7 +72,7 @@ const CreateComment = ({
     >
       <div className="flex items-center gap-2">
         <Image
-          src={user.avatar!}
+          src={user?.avatar!}
           width={35}
           height={35}
           alt="user avatar"
@@ -114,7 +114,7 @@ const CreateComment = ({
               <div className="flex items-start gap-4" key={comment._id}>
                 <Link href={`/user/${comment.user.userId}`}>
                   <Image
-                    src={comment.user.avatar}
+                    src={comment.user.avatar || "/assets/default-avatar.jpg"}
                     width={35}
                     height={35}
                     alt="user avatar"

@@ -1,5 +1,6 @@
 import { getPosts } from "@/actions/posts";
 import { createOrGetUser } from "@/actions/user";
+import FollowUser from "@/components/shared/FollowUser";
 import PostFeed from "@/components/shared/PostFeed";
 import { FetchedPostType, SafeUser } from "@/types";
 import { auth } from "@clerk/nextjs/server";
@@ -55,6 +56,13 @@ const page = async ({
             >
               რედაქტირება
             </Link>
+          )}
+
+          {!isAuthenticated && (
+            <FollowUser
+              followerId={user.userId}
+              followingId={existingUser._id}
+            />
           )}
         </div>
 

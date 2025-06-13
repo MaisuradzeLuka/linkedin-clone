@@ -90,8 +90,6 @@ const PostFeed = async ({
             There are no posts to display
           </p>
         )}
-
-        {/* <LoadMorePosts /> */}
       </section>
     </div>
   );

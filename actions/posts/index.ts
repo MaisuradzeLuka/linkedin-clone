@@ -27,8 +27,6 @@ export const getPosts = async (search = "", skip = 0, userId?: string) => {
   try {
     const posts = await Post.find(query)
       .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(10)
       .populate([
         { path: "user" },
         {
@@ -72,7 +70,12 @@ export const getPosts = async (search = "", skip = 0, userId?: string) => {
           ...post,
           _id: post._id.toString(),
           user: {
-            ...post.user,
+            _id: post.user._id.toString(),
+            userId: post.user.userId,
+            bio: post.user.bio,
+            firstname: post.user.firstname,
+            lastname: post.user.lastname,
+            username: post.user.username,
             avatar: userAvatar,
           },
           postImage: signedPostImage,

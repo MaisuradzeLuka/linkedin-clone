@@ -11,7 +11,7 @@ export type CommentType = {
     _id: any;
     firstname: string;
     lastname?: string;
-    avatar: string;
+    avatar?: string;
     userId: string;
   };
   comment: string;
@@ -34,4 +34,15 @@ export type SafeUser = {
   username?: string;
   bio?: string;
   backgroundImg?: string;
+  following?: string[];
+};
+
+export type Network = {
+  _id: string;
+  userId: string;
+  firstname: string | null;
+  lastname: string | null;
+  avatar: { img: string; edited: boolean };
+  username: string;
+  bio?: string;
 };

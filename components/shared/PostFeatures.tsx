@@ -18,7 +18,7 @@ import CreateComment from "../Forms/CreateComment";
 
 type PostFeaturesType = {
   postId: string;
-  user: SafeUser;
+  user: SafeUser | null;
   comments?: CommentType[];
   defaultLikes: string[];
 };
@@ -60,9 +60,9 @@ const PostFeatures = ({
 
   const handleLike = async () => {
     setIsLoading(true);
-    const type = likes.includes(user.userId) ? "unlike" : "like";
+    const type = likes.includes(user?.userId!) ? "unlike" : "like";
 
-    const res = await likeUnlikePost(postId, type, user.userId);
+    const res = await likeUnlikePost(postId, type, user?.userId!);
 
     setLikes(res);
     setIsLoading(false);
@@ -91,7 +91,7 @@ const PostFeatures = ({
           >
             <ThumbsUp
               className={`w-4 h-4 sm:w-6 sm:h-6  ${
-                likes.includes(user.userId) ? "text-blue-500" : ""
+                likes.includes(user?.userId!) ? "text-blue-500" : ""
               }`}
             />{" "}
             Like
