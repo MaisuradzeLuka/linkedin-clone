@@ -11,6 +11,7 @@ import { imageToBase64 } from "@/lib/utils";
 const CreatePost = ({ user }: { user: SafeUser }) => {
   const [postValue, setPostValue] = useState("");
   const [isTouched, setIsTouched] = useState(false);
+  // const [imageFile, setImageFile] = useState("");
   const [image, setImage] = useState<{
     string: string;
     blob: File | undefined;
@@ -22,7 +23,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
   const [imageError, setImageError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  let imageFile;
+  let imageFile = "";
 
   const onPostValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     const text = e.currentTarget.value;
@@ -43,6 +44,8 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
   const onImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
 
+    console.log(e.currentTarget.value);
+    imageFile = e.currentTarget.value;
     if (!file) return;
 
     const image = await imageToBase64(file);
@@ -52,14 +55,16 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
       return;
     } else {
       setImage({ string: image.body, blob: file });
-      imageFile = file;
+      // setImageFile(file.name);
       if (imageError) setImageError("");
     }
   };
 
+  console.log(imageFile);
+
   const onImageDelete = () => {
+    imageFile = "";
     setImage({ string: "", blob: undefined });
-    imageFile = null;
 
     if (imageError) {
       setImageError("");
@@ -84,6 +89,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
     setIsLoading(true);
 
     const newPost = await createPost(postValue, user._id, image.blob);
+    imageFile = "";
 
     if (newPost) {
       toast.success("Post created!", {
@@ -94,7 +100,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
 
       setPostValue("");
       setImage({ string: "", blob: undefined });
-      imageFile = null;
+      ("");
       setPostValueError("");
       setImageError("");
     } else {

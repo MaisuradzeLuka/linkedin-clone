@@ -44,7 +44,7 @@ const AddImage = ({
   setError,
   clearErrors,
 }: AddImageProps) => {
-  const handleBgImg = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
 
     if (!file) {
@@ -86,7 +86,7 @@ const AddImage = ({
           accept="image/*"
           id={imageId}
           className="hidden"
-          onChange={(e) => handleBgImg(e)}
+          onChange={(e) => handleImageChange(e)}
         />
       </label>
 

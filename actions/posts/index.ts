@@ -32,7 +32,10 @@ export const getPosts = async (search = "", skip = 0, userId?: string) => {
         {
           path: "comments",
           options: { sort: { createdAt: -1 } },
-          populate: { path: "user" },
+          populate: {
+            path: "user",
+            select: "userId avatar firstname lastname",
+          },
         },
       ])
       .lean<FetchedPostType[]>();
@@ -96,9 +99,17 @@ export const deletePost = async (postId: string) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(postId);
 
+    console.log(deletedPost);
+
+    const imageUrl = await generateBlobSASUrl(deletedPost.postImage, "posts");
+
+    const res = await fetch(imageUrl as URL | RequestInfo, {
+      method: "DELETE",
+    });
+
     revalidatePath("/");
 
-    if (deletedPost) {
+    if (deletedPost && res.ok) {
       return "SUCCESS";
     } else {
       return "ERROR";

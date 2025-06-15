@@ -131,7 +131,7 @@ const CreateComment = ({
                     {getTimeAgo(comment.createdAt)}
                   </span>
 
-                  <p className="break-all mt-4">{comment.comment}</p>
+                  <p className="break-all mt-3 text-sm">{comment.comment}</p>
                 </div>
               </div>
             ))}

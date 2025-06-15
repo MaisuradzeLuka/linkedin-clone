@@ -24,7 +24,7 @@ const page = async () => {
                 height={48}
                 width={48}
                 alt="following user profile"
-                className="rounded-full w-12 h-12 object-cover"
+                className="rounded-full !max-w-12 h-12 object-cover"
               />
             </Link>
 

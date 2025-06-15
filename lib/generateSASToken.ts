@@ -27,6 +27,7 @@ export async function generateWriteSASToken(containerName: string) {
   const permissions = new BlobSASPermissions();
   permissions.write = true;
   permissions.create = true;
+  permissions.delete = true;
 
   const sasToken = generateBlobSASQueryParameters(
     {
@@ -54,6 +55,7 @@ export async function generateBlobSASUrl(
 
   const permissions = new BlobSASPermissions();
   permissions.read = true;
+  permissions.delete = true;
 
   const sasToken = generateBlobSASQueryParameters(
     {

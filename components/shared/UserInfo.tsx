@@ -13,14 +13,14 @@ const UserInfo = async ({
   const userPostsLength =
     posts.filter((post) => post.user.userId === user?.userId).length || 0;
 
-  const userCommentsLength = posts.reduce((count, post) => {
-    const comments = post.comments ?? [];
+  // const userCommentsLength = posts.reduce((count, post) => {
+  //   const comments = post.comments ?? [];
 
-    const userComments = comments.filter(
-      (comment) => comment.user.userId === user?.userId
-    );
-    return count + userComments.length;
-  }, 0);
+  //   const userComments = comments.filter(
+  //     (comment) => comment.user.userId === user?.userId
+  //   );
+  //   return count + userComments.length;
+  // }, 0);
 
   return (
     <div className="relative bg-white rounded-xl border-[1px] border-[#d1d1ce] ">
@@ -58,7 +58,7 @@ const UserInfo = async ({
         </p>
 
         <p className="flex justify-between w-full text-gray-500">
-          Comments <span className="text-blue-300">{userCommentsLength}</span>
+          Comments <span className="text-blue-300">{0}</span>
         </p>
       </div>
     </div>
