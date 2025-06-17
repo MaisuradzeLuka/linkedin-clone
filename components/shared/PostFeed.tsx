@@ -27,7 +27,7 @@ const PostFeed = async ({
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 mb-20 md:mb-0">
       {showCreatePost && <CreatePost user={clientUser as SafeUser} />}
 
       <div className="w-full h-[1px] bg-gray-300 mt-2" />

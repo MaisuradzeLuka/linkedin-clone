@@ -44,7 +44,6 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
   const onImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
 
-    console.log(e.currentTarget.value);
     imageFile = e.currentTarget.value;
     if (!file) return;
 
@@ -55,12 +54,9 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
       return;
     } else {
       setImage({ string: image.body, blob: file });
-      // setImageFile(file.name);
       if (imageError) setImageError("");
     }
   };
-
-  console.log(imageFile);
 
   const onImageDelete = () => {
     imageFile = "";
@@ -100,7 +96,6 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
 
       setPostValue("");
       setImage({ string: "", blob: undefined });
-      ("");
       setPostValueError("");
       setImageError("");
     } else {
@@ -161,7 +156,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
         {(image.string || postValue) && (
           <Button
             variant="outline"
-            className="absolute left-0 bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer text-xs sm:text-sm px-2 sm:px-4"
+            className="absolute left-0 bg-white h-auto text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer text-xs py-[6px] sm:text-sm px-2 sm:px-4"
             type="submit"
             disabled={isLoading}
           >
@@ -169,7 +164,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
           </Button>
         )}
 
-        <label className="flex items-center justify-center bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition border !border-gray-500 py-1 px-2 sm:py-2 sm:px-4 rounded-md font-semibold text-xs sm:text-sm  cursor-pointer">
+        <label className="flex items-center justify-center bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition border !border-gray-500 py-[6px] px-2 sm:py-2 sm:px-4 rounded-md font-semibold text-xs sm:text-sm  cursor-pointer">
           {image.string ? "Change image" : "Add image"}
           <input
             type="file"
@@ -185,7 +180,7 @@ const CreatePost = ({ user }: { user: SafeUser }) => {
         {image.string && (
           <Button
             variant="outline"
-            className="bg-white text-gray-900 hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer text-xs sm:text-sm py-1 px-2"
+            className="bg-white text-gray-900 h-auto hover:bg-gray-500 hover:text-white transition !border-gray-500 cursor-pointer text-xs sm:text-sm !py-1 sm:py-2 px-2"
             type="button"
             onClick={onImageDelete}
           >

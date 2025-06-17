@@ -38,8 +38,6 @@ const FollowUser = ({
 
     const res = await followUser(followingId, followerUser?._id, isFollowing);
 
-    console.log(res);
-
     if (res.message !== "success") {
       toast.error("Something went wrong, please try again.");
       return;

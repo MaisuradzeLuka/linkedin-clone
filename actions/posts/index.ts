@@ -99,8 +99,6 @@ export const deletePost = async (postId: string) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(postId);
 
-    console.log(deletedPost);
-
     const imageUrl = await generateBlobSASUrl(deletedPost.postImage, "posts");
 
     const res = await fetch(imageUrl as URL | RequestInfo, {

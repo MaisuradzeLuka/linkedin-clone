@@ -42,7 +42,7 @@ function Header({ userId, user }: { userId: string | null; user: SafeUser }) {
       </div>
 
       <div className="flex items-center ">
-        <div className="w-full flex justify-center items-center gap-3 border-t-[2px] md:border-none border-[#d1d1ce] bg-white fixed md:relative bottom-0 md:bottom-auto left-0 md:left-auto z-99 py-2 md:py-0 mr-2">
+        <div className="w-full flex justify-center items-center gap-7 border-t-[2px] md:border-none border-[#d1d1ce] bg-white fixed md:relative bottom-0 md:bottom-auto left-0 md:left-auto z-99 py-2 md:py-0 mr-2">
           <Link
             href="/"
             className={`px-2 w-max ${
@@ -77,11 +77,6 @@ function Header({ userId, user }: { userId: string | null; user: SafeUser }) {
           >
             <User className="h-5 " />
             <p>User</p>
-          </Link>
-
-          <Link href="" className="icon icon px-2 w-max ">
-            <MessagesSquare className="h-5" />
-            <p>Messaging</p>
           </Link>
         </div>
 

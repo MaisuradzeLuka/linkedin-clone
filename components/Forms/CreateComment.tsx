@@ -118,7 +118,7 @@ const CreateComment = ({
                     width={35}
                     height={35}
                     alt="user avatar"
-                    className="rounded-full h-9 w-9 object-covr self-start"
+                    className="rounded-full h-9 max-w-12 object-covr self-start"
                   />
                 </Link>
 
