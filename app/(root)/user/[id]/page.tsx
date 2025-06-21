@@ -54,7 +54,7 @@ const page = async ({
               href={`/user/${id}/edit`}
               className="px-3 py-[6px] text-sm md:text-md font-medium rounded-full border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition"
             >
-              რედაქტირება
+              Edit
             </Link>
           )}
 
