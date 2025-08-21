@@ -1,4 +1,5 @@
 import { imageToBase64 } from "@/lib/utils";
+import { Image } from "@imagekit/next";
 import { Plus } from "lucide-react";
 import React, { ChangeEvent } from "react";
 import {
@@ -69,11 +70,21 @@ const AddImage = ({
         htmlFor={imageId}
         className={`${imageId} flex justify-center items-center relative group`}
       >
-        <img
-          src={image || defaultImage}
-          alt={`user ${imageId}`}
-          className="w-full object-cover "
-        />
+        {image?.startsWith("https") ? (
+          <Image
+            src={image}
+            alt={`user ${imageId}`}
+            className="w-full object-cover"
+            width={40}
+            height={40}
+          />
+        ) : (
+          <img
+            src={image || defaultImage}
+            alt={`user ${imageId}`}
+            className="w-full object-cover"
+          />
+        )}
 
         <div className="image-hover">
           <button className="text-white hover:text-green-400 transition cursor-pointer">

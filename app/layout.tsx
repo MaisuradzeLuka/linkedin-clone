@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { auth } from "@clerk/nextjs/server";
 import { createOrGetUser } from "@/actions/user";
+import { ImageKitProvider } from "@imagekit/next";
 
 export const metadata: Metadata = {
   title: "Linkedin",
@@ -22,16 +23,18 @@ export default async function RootLayout({
 
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className="h-screen flex flex-col antialiased bg-[#F4F2EE] ">
-          <header className="border-b border-gray-300 sticky top-0 bg-white z-50">
-            <Header userId={userId} user={user} />
-          </header>
+      <ImageKitProvider urlEndpoint="https://ik.imagekit.io/codeverse">
+        <html lang="en">
+          <body className="h-screen flex flex-col antialiased bg-[#F4F2EE] ">
+            <header className="border-b border-gray-300 sticky top-0 bg-white z-50">
+              <Header userId={userId} user={user} />
+            </header>
 
-          {children}
-          <Toaster />
-        </body>
-      </html>
+            {children}
+            <Toaster />
+          </body>
+        </html>
+      </ImageKitProvider>
     </ClerkProvider>
   );
 }

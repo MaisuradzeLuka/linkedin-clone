@@ -1,5 +1,6 @@
 "use server";
 
+import imagekit from "@/lib/generateImageKitInstance";
 import {
   blobServiceClient,
   generateBlobSASUrl,
@@ -35,14 +36,6 @@ type FetchedUserType = CreateUserInput & {
   _id: string;
 };
 
-export async function generateImgUrl(
-  image: { img: string; edited: boolean },
-  container: string
-) {
-  if (image.edited) return await generateBlobSASUrl(image.img, container);
-  if (!image.edited) return image.img;
-}
-
 export const createOrGetUser = async ({ create, get, update }: UserType) => {
   await connectToDb();
 
@@ -64,20 +57,6 @@ export const createOrGetUser = async ({ create, get, update }: UserType) => {
             user.toString()
           ),
         };
-
-        if (existingUser.avatar.edited) {
-          plainObject.avatar = await generateBlobSASUrl(
-            existingUser.avatar.img,
-            "users"
-          );
-        }
-
-        if (existingUser.backgroundImg.edited) {
-          plainObject.backgroundImg = await generateBlobSASUrl(
-            existingUser.backgroundImg.img,
-            "users"
-          );
-        }
 
         return plainObject as FetchedUserType;
       } else {
@@ -115,40 +94,27 @@ export const createOrGetUser = async ({ create, get, update }: UserType) => {
       };
 
       if (update.avatar instanceof File) {
-        const sasToken = await generateWriteSASToken("users");
-        const containerClient = blobServiceClient.getContainerClient("users");
-        const avatarName = `${randomUUID()}?${sasToken}`;
-        const blockBlobClient = containerClient.getBlockBlobClient(avatarName);
+        const buffer = Buffer.from(await update.avatar.arrayBuffer());
 
-        const arrayBuffer = await update.avatar.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-
-        await blockBlobClient.uploadData(buffer, {
-          blobHTTPHeaders: {
-            blobContentType: update.avatar.type,
-          },
+        const result = await imagekit.upload({
+          file: buffer,
+          fileName: update.avatar.name,
+          folder: "/linkedin-clone/users/avatars",
         });
 
-        updateUser.avatar = { img: avatarName, edited: true };
+        updateUser.avatar = { img: result.url, edited: true };
       }
 
       if (update.backgroundImg instanceof File) {
-        const sasToken = await generateWriteSASToken("users");
-        const containerClient = blobServiceClient.getContainerClient("users");
-        const backgroundImgName = `${randomUUID()}?${sasToken}`;
-        const blockBlobClient =
-          containerClient.getBlockBlobClient(backgroundImgName);
+        const buffer = Buffer.from(await update.backgroundImg.arrayBuffer());
 
-        const arrayBuffer = await update.backgroundImg.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-
-        await blockBlobClient.uploadData(buffer, {
-          blobHTTPHeaders: {
-            blobContentType: update.backgroundImg.type,
-          },
+        const result = await imagekit.upload({
+          file: buffer,
+          fileName: update.backgroundImg.name,
+          folder: "/linkedin-clone/users/backgrounds",
         });
 
-        updateUser.backgroundImg = { img: backgroundImgName, edited: true };
+        updateUser.backgroundImg = { img: result.url, edited: true };
       }
 
       const updatedUser = await User.findOneAndUpdate(
@@ -227,28 +193,6 @@ export const getNetwork = async (
           path: network,
           select: "avatar firstname lastname username bio userId",
         });
-
-    if (existingUser.following?.length) {
-      existingUser.following.map(async (user) => {
-        if (user.avatar.edited) {
-          user.avatar.img = (await generateBlobSASUrl(
-            user.avatar.img,
-            "users"
-          )) as string;
-        }
-      });
-    }
-
-    if (existingUser.followers?.length) {
-      existingUser.followers.map(async (user) => {
-        if (user.avatar.edited) {
-          user.avatar.img = (await generateBlobSASUrl(
-            user.avatar.img,
-            "users"
-          )) as string;
-        }
-      });
-    }
 
     return existingUser;
   } catch (error: any) {

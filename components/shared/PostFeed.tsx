@@ -1,4 +1,3 @@
-import Image from "next/image";
 import CreatePost from "../Forms/CreatePost";
 import { FetchedPostType, SafeUser } from "@/types";
 import { getTimeAgo } from "@/lib/utils";
@@ -6,6 +5,7 @@ import PostFeatures from "./PostFeatures";
 import Link from "next/link";
 import DeletePost from "./DeletePost";
 import LoadMorePosts from "./LoadMorePosts";
+import { Image, ImageKitAbortError } from "@imagekit/next";
 
 const PostFeed = async ({
   posts,
@@ -44,7 +44,7 @@ const PostFeed = async ({
               <div className="flex items-start gap-2">
                 <Link href={`/user/${post.user.userId}`}>
                   <Image
-                    src={post?.user.avatar!}
+                    src={post?.user.avatar!.img}
                     width={48}
                     height={48}
                     alt="user avatar"

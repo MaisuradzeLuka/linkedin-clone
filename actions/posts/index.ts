@@ -11,7 +11,8 @@ import {
   generateBlobSASUrl,
   generateWriteSASToken,
 } from "@/lib/generateSASToken";
-import { generateImgUrl } from "../user";
+import ImageKit from "imagekit";
+import imagekit from "@/lib/generateImageKitInstance";
 
 registerModels();
 
@@ -42,14 +43,14 @@ export const getPosts = async (search = "", skip = 0, userId?: string) => {
 
     const postsWithSignedUrls = await Promise.all(
       posts.map(async (post) => {
-        const signedPostImage = post.postImage
-          ? await generateBlobSASUrl(post.postImage, "posts")
-          : undefined;
+        // const signedPostImage = post.postImage
+        //   ? await generateBlobSASUrl(post.postImage, "posts")
+        //   : undefined;
 
-        const userAvatar = await generateImgUrl(
-          post.user.avatar as unknown as { img: string; edited: boolean },
-          "users"
-        );
+        // const userAvatar = await generateImgUrl(
+        //   post.user.avatar as unknown as { img: string; edited: boolean },
+        //   "users"
+        // );
 
         const commentsWithAvatars = await Promise.all(
           (post.comments ?? []).map(async (comment: CommentType) => ({
@@ -58,13 +59,13 @@ export const getPosts = async (search = "", skip = 0, userId?: string) => {
             user: {
               ...comment.user,
               _id: comment.user._id.toString(),
-              avatar: await generateImgUrl(
-                comment.user.avatar as unknown as {
-                  img: string;
-                  edited: boolean;
-                },
-                "users"
-              ),
+              // avatar: await generateImgUrl(
+              //   comment.user.avatar as unknown as {
+              //     img: string;
+              //     edited: boolean;
+              //   },
+              //   "users"
+              // ),
             },
           }))
         );
@@ -79,9 +80,9 @@ export const getPosts = async (search = "", skip = 0, userId?: string) => {
             firstname: post.user.firstname,
             lastname: post.user.lastname,
             username: post.user.username,
-            avatar: userAvatar,
+            avatar: post.user.avatar,
           },
-          postImage: signedPostImage,
+          postImage: post.postImage,
           comments: commentsWithAvatars,
         };
       })
@@ -99,15 +100,15 @@ export const deletePost = async (postId: string) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(postId);
 
-    const imageUrl = await generateBlobSASUrl(deletedPost.postImage, "posts");
+    // const imageUrl = await generateBlobSASUrl(deletedPost.postImage, "posts");
 
-    const res = await fetch(imageUrl as URL | RequestInfo, {
-      method: "DELETE",
-    });
+    // const res = await fetch(imageUrl as URL | RequestInfo, {
+    //   method: "DELETE",
+    // });
 
     revalidatePath("/");
 
-    if (deletedPost && res.ok) {
+    if (deletedPost) {
       return "SUCCESS";
     } else {
       return "ERROR";
@@ -130,21 +131,15 @@ export const createPost = async (
 
   if (image) {
     try {
-      const sasToken = await generateWriteSASToken("posts");
-      const containerClient = blobServiceClient.getContainerClient("posts");
-      const blobName = `${randomUUID()}?${sasToken}`;
-      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+      const buffer = Buffer.from(await image.arrayBuffer());
 
-      const arrayBuffer = await image.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-
-      await blockBlobClient.uploadData(buffer, {
-        blobHTTPHeaders: {
-          blobContentType: image.type,
-        },
+      const result = await imagekit.upload({
+        file: buffer,
+        fileName: image.name,
+        folder: "/linkedin-clone/posts",
       });
 
-      postBody.postImage = blobName;
+      postBody.postImage = result.url;
     } catch (error: any) {
       throw new Error(`Coulnt upload image to azure: ${error.message}`);
     }

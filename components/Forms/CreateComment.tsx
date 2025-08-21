@@ -1,8 +1,7 @@
 import { createComment } from "@/actions/comments";
 import { getTimeAgo } from "@/lib/utils";
 import { CommentType, SafeUser } from "@/types";
-import { useUser } from "@clerk/nextjs";
-import Image from "next/image";
+import { Image } from "@imagekit/next";
 import Link from "next/link";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -65,6 +64,8 @@ const CreateComment = ({
     setLoading(false);
   };
 
+  console.log(comments);
+
   return (
     <form
       onSubmit={(e) => handleComment(e)}
@@ -114,7 +115,9 @@ const CreateComment = ({
               <div className="flex items-start gap-4" key={comment._id}>
                 <Link href={`/user/${comment.user.userId}`}>
                   <Image
-                    src={comment.user.avatar || "/assets/default-avatar.jpg"}
+                    src={
+                      comment.user.avatar.img || "/assets/default-avatar.jpg"
+                    }
                     width={35}
                     height={35}
                     alt="user avatar"
