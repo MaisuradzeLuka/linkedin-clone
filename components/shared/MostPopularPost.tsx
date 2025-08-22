@@ -1,6 +1,6 @@
 import { getTimeAgo, trimString } from "@/lib/utils";
 import { FetchedPostType } from "@/types";
-import Image from "next/image";
+import { Image } from "@imagekit/next";
 import React from "react";
 
 const MostPopularPost = ({ posts }: { posts: FetchedPostType[] }) => {
@@ -17,7 +17,7 @@ const MostPopularPost = ({ posts }: { posts: FetchedPostType[] }) => {
     >
       <div className="flex items-start gap-2">
         <Image
-          src={post?.user.avatar}
+          src={post?.user.avatar!.img}
           width={48}
           height={48}
           alt="user avatar"
